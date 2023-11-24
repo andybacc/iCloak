@@ -26,10 +26,10 @@ const Emissione = () => {
 
   return (
     <>
-      <Container textAlign={'right'} p='4'>
+      <Container textAlign={'right'} p='4' minW='800px'>
           <Button variant='solid' onClick={onOpen} leftIcon={<BsGearFill />}>Impostazioni</Button>
       </Container>
-      <Container>
+      <Container minW='800px'>
         <Date date={date} dataSel={dataSel} setDataSel={setDataSel} />
       </Container>
       {dataSel? <Print dataSel={dataSel} /> : null}
