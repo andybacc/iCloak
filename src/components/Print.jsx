@@ -1,6 +1,7 @@
 import { Heading } from '@chakra-ui/layout'
 import { Box, Button, VStack, Card, Flex, CardBody, CardFooter, CardHeader, Container, Input, InputGroup, InputRightElement, ListItem, SimpleGrid, UnorderedList } from '@chakra-ui/react'
 import dayjs from 'dayjs'
+import useStore from '../store'
 
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
@@ -8,9 +9,10 @@ import apiClient from '../services/apiClient'
 
 
 const Print = ({dataSel}) => {
+    const { inizialeG, inizialeB } = useStore()
     const [log, setLog] = useState([])
-    const [lastNumG, setLastNumG] = useState(1)
-    const [lastNumB, setLastNumB] = useState(1)
+    const [lastNumG, setLastNumG] = useState(inizialeG)
+    const [lastNumB, setLastNumB] = useState(inizialeB)
 
     useEffect(() => {
         apiClient.get(`/last/` + dataSel)
@@ -26,6 +28,7 @@ const Print = ({dataSel}) => {
           console.log(e)
         })
     }, [dataSel] )
+    
     return (
     <Container p='4' minW='800px'>
         <Flex>
@@ -39,11 +42,13 @@ const Print = ({dataSel}) => {
 }
 const Log = ({log}) => {
     return (
-        <UnorderedList styleType={'none'} >
-        {log.map((item, index) => 
-            <ListItem key={index} ><Box as="b">{item.numero}</Box> <Box as="small">{dayjs(item.data).format('HH:mm:ss')}</Box></ListItem>
-        )}
-        </UnorderedList>
+        <Box h='75vh' overflow='hidden' >
+            <UnorderedList styleType={'none'}>
+            {log.map((item, index) => 
+                <ListItem key={index} ><Box as="b">{item.numero}</Box> <Box as="small">{dayjs(item.data).format('HH:mm:ss')}</Box></ListItem>
+            )}
+            </UnorderedList>
+        </Box>
     )
 }
 const Modulo = ({type, num}) => {
@@ -55,14 +60,14 @@ const Modulo = ({type, num}) => {
                 <Heading as="h1" fontSize="5rem" p='6'>{num}</Heading>
             </CardBody>
             <CardFooter p='1'>
-                <Ristampa num={num}/>
+                <Ristampa num={num} type={type} />
             </CardFooter>
         </Card>
-        <Button variant='solid' bgColor={(type=='GIACCA')?'teal':'magenta'} w='150px' h='150px' onClick={()=>Stampa(num)}>{type}</Button>
+        <Button variant='solid' bgColor={(type=='GIACCA')?'blue.400':'teal.400'} w='150px' h='150px' onClick={()=>Stampa(num)}>{type}</Button>
     </VStack>
     )
 }
-const Ristampa = ({num}) => {
+const Ristampa = ({num,type}) => {
     useEffect(() => {
 
     }, [num] )
@@ -74,7 +79,7 @@ const Ristampa = ({num}) => {
                 placeholder=' '
             />
             <InputRightElement width='4.5rem'>
-                <Button h='1.75rem' size='sm' onClick={()=>Ristampa(this.value)}>
+                <Button bgColor={(type=='GIACCA')?'blue.400':'teal.400'} h='1.75rem' size='sm' onClick={()=>Ristampa(this.value)}>
                     Ristampa
                 </Button>
             </InputRightElement>

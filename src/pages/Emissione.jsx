@@ -4,7 +4,7 @@ import { BsGearFill } from 'react-icons/bs'
 
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
-import MyModal from '../components/ModalProdotto'
+import MyModal from '../components/Setup'
 import Print from '../components/Print'
 import apiClient from '../services/apiClient'
 import dayjs from 'dayjs'
@@ -33,7 +33,7 @@ const Emissione = () => {
         <Date date={date} dataSel={dataSel} setDataSel={setDataSel} />
       </Container>
       {dataSel? <Print dataSel={dataSel} /> : null}
-      <MyModal isOpen={isOpen} onClose={onClose} />
+      <MyModal isOpen={isOpen} onClose={onClose} dataSel={dataSel} />
     </>
   )
 }
@@ -42,7 +42,7 @@ const Date = ({dataSel,date,setDataSel}) => {
   return (
     <Flex>
       {_.map(date, (d,i) => {
-        return (<Button variant={dataSel==d.id?'solid':'outline'} key={i} data={d.prodotti} onClick={()=>setDataSel(d.id)}>
+        return (<Button variant={dataSel==d.id?'solid':'outline'} bgColor={dataSel==d.id?'magenta':null} key={i} data={d.prodotti} onClick={()=>setDataSel(d.id)}>
           {dayjs(d.data).format('DD MMM')}
         </Button>)
       }
