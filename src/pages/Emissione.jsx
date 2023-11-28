@@ -8,10 +8,10 @@ import MyModal from '../components/Setup'
 import Print from '../components/Print'
 import apiClient from '../services/apiClient'
 import dayjs from 'dayjs'
+import useStore from '../store'
 
 const Emissione = () => {
-  const [date, setDate] = useState([])
-  const [dataSel, setDataSel] = useState(null)
+  const { setDate, dataSel } = useStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Emissione = () => {
       setDate(r.data)
     })
     .catch((e) => {
-      console.log(e)
+      console.log('error in date')
     })
   }, [])
 
@@ -30,18 +30,20 @@ const Emissione = () => {
           <Button variant='solid' onClick={onOpen} leftIcon={<BsGearFill />}>Impostazioni</Button>
       </Container>
       <Container minW='800px'>
-        <Date date={date} dataSel={dataSel} setDataSel={setDataSel} />
+        <Date />
       </Container>
-      {dataSel? <Print dataSel={dataSel} /> : null}
-      <MyModal isOpen={isOpen} onClose={onClose} dataSel={dataSel} />
+      {dataSel? <Print /> : null}
+      <MyModal isOpen={isOpen} onClose={onClose} />
     </>
   )
 }
 
-const Date = ({dataSel,date,setDataSel}) => {
+const Date = () => {
+  const { date, dataSel, setDataSel } = useStore()
+
   return (
     <Flex>
-      {_.map(date, (d,i) => {
+      {date?.map((d,i) => {
         return (<Button variant={dataSel==d.id?'solid':'outline'} bgColor={dataSel==d.id?'magenta':null} key={i} data={d.prodotti} onClick={()=>setDataSel(d.id)}>
           {dayjs(d.data).format('DD MMM')}
         </Button>)
