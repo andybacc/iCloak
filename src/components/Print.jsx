@@ -1,8 +1,8 @@
 import { Heading } from '@chakra-ui/layout'
-import { Box, Text, Button, VStack, Card, Flex, CardBody, CardFooter, CardHeader, Container, Input, InputGroup, InputRightElement, ListItem, SimpleGrid, UnorderedList } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/toast'
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Input, InputGroup, InputRightElement, ListItem, Spinner, Text, UnorderedList, VStack } from '@chakra-ui/react'
 import dayjs from 'dayjs'
 import useStore from '../store'
-
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import apiClient from '../services/apiClient'
@@ -11,20 +11,38 @@ function color(type) {
     return (type=='giacca')?'blue.400':'teal.400'
 }
 const Print = () => {
-    const { dataSel, inizialeG, inizialeB, printer, registro, setRegistro } = useStore()
-    const [lastNumG, setLastNumG] = useState(inizialeG)
-    const [lastNumB, setLastNumB] = useState(inizialeB)
-    const [isLoading, setIsLoading] = useState(false)
+    const { dataSel, iniziali, printer, registro, setRegistro } = useStore()
+    const [lastNumG, setLastNumG] = useState(iniziali?.G)
+    const [lastNumB, setLastNumB] = useState(iniziali?.B)
+    const [isLoading, setIsLoading] = useState({status: false, type: ''})
+    const toast = useToast()
 
     const Stampa = (num,type,reprint) => {
         if (num==0) {
-            alert('Inserire un numero valido')
+            toast({ title: 'Inserire un numero', status: 'error', isClosable: true })
             return
         }
-        setIsLoading(true)
-        apiClient.post(`/print/` + dataSel,
-            { 'numero': parseInt(num), 'loop':1 , 'type':type, 'reprint': reprint, 'venue': printer.venue, 'ip': printer.ip}
-        )
+        if (printer.ip=='') {
+            toast({ title: 'Selezionare una stampante', status: 'error', isClosable: true })
+            return
+        }
+        var min = (type=='giacca')?iniziali.G:iniziali.B
+        if (num<min) {
+            toast({ title: 'Numero inferiore a quello iniziale', status: 'error', isClosable: true })
+            return
+        }
+        setIsLoading({status: true, type: type})
+
+        var record = {
+            'numero': parseInt(num),
+            'loop': 1,
+            'type':type,
+            'reprint': reprint,
+            'venue': printer.nome,
+            'ip': printer.ip
+        }
+
+        apiClient.post(`/print/` + dataSel, record)
         .then((r) => {
             var record = {
                 numero: num,
@@ -35,14 +53,12 @@ const Print = () => {
             setRegistro(_.concat(record, registro))
         })
         .catch((e) => {
-            console.log(e)
-            var record = {
-                numero: num,
-                type: type,
-                data: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-                reprint: reprint?1:0,
-            }
-            setRegistro(_.concat(record, registro))
+            setIsLoading({status: false, type: ''})
+            toast({
+                title: e.response.data.error,
+                status: 'error', 
+                isClosable: true
+            })
         })
     }
     useEffect(() => {
@@ -51,7 +67,7 @@ const Print = () => {
             setRegistro(r.data)
         })
         .catch((e) => {
-          console.log(e)
+            toast({ title: e.response.data.error, status: 'error', isClosable: true })
         })
     }, [dataSel] )
 
@@ -59,19 +75,20 @@ const Print = () => {
         var giacche = _.find(registro, {type: 'giacca', reprint: 0})
         var borse = _.find(registro, {type: 'borsa', reprint: 0})
         
-        setLastNumG(giacche? giacche.numero+1 : 1)
-        setLastNumB(borse? borse.numero+1 : 1)
-        setIsLoading(false)
-    }, [registro])
-return (
-    <Container p='4' minW='800px'>
-        <Flex>
-            <Modulo w='40%' type='giacca' num={lastNumG} Stampa={Stampa} isLoading={isLoading} />
-            <Modulo w='40%' type='borsa' num={lastNumB} Stampa={Stampa} isLoading={isLoading} />
-            <Registro w='20%' registro={registro} />
-        </Flex>
+        setLastNumG(giacche? giacche.numero+1 : iniziali.G)
+        setLastNumB(borse? borse.numero+1 : iniziali.B)
+        setIsLoading({status: false, type: ''})
+    }, [registro,iniziali])
 
-    </Container>
+    return (
+        <Container p='4' minW='800px'>
+            <Flex>
+                <Modulo w='40%' type='giacca' num={lastNumG} Stampa={Stampa} isLoading={isLoading} />
+                <Modulo w='40%' type='borsa' num={lastNumB} Stampa={Stampa} isLoading={isLoading} />
+                <Registro w='20%' registro={registro} />
+            </Flex>
+
+        </Container>
     )
 }
 const Registro = ({registro}) => {
@@ -95,14 +112,14 @@ const Modulo = ({type, num, Stampa, isLoading}) => {
         <Card textAlign={'center'} mr='3' >
             <CardHeader bgColor="grey" textTransform='uppercase'>{type}</CardHeader>
             <CardBody >
-                <Heading as="h1" fontSize="5rem" p='6'>{num}</Heading>
+                <Heading as="h1" fontSize="5rem" p='6'>{isLoading.status && isLoading.type==type?<Spinner size='xl' />:num}</Heading>
                 <Text size='small' p='1'>prossimo numero</Text>
             </CardBody>
             <CardFooter p='1'>
                 <Ristampa num={num} type={type} Stampa={Stampa} isLoading={isLoading} />
             </CardFooter>
         </Card>
-        <Button isDisabled={isLoading} variant='solid' bgColor={color(type)} w='150px' h='150px' onClick={()=>Stampa(num,type,false)} textTransform='uppercase'>{type}</Button>
+        <Button isDisabled={isLoading.status && isLoading.type==type} variant='solid' bgColor={color(type)} w='150px' h='150px' onClick={()=>Stampa(num,type,false)} textTransform='uppercase'>{type}</Button>
     </VStack>
     )
 }
@@ -119,7 +136,7 @@ const Ristampa = ({type,Stampa,isLoading}) => {
                 onChange={(e) => setNum(e.target.value)}
             />
             <InputRightElement width='4.5rem'>
-                <Button isDisabled={isLoading} bgColor={color(type)} h='1.75rem' size='sm' onClick={()=>Stampa(num,type,true)}>
+                <Button isDisabled={isLoading.status && isLoading.type==type} bgColor={color(type)} h='1.75rem' size='sm' onClick={()=>Stampa(num,type,true)}>
                     Ristampa
                 </Button>
             </InputRightElement>

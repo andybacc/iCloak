@@ -6,22 +6,17 @@ import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import MyModal from '../components/Setup'
 import Print from '../components/Print'
-import apiClient from '../services/apiClient'
 import dayjs from 'dayjs'
 import useStore from '../store'
 
 const Emissione = () => {
-  const { setDate, dataSel } = useStore()
+  const { dataSel, getIniziali } = useStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { fetchDate } = useStore()
 
   useEffect(() => {
-    apiClient.get(`/date/1`)
-    .then((r) => {
-      setDate(r.data)
-    })
-    .catch((e) => {
-      console.log('error in date')
-    })
+    fetchDate()
+    getIniziali()
   }, [])
 
   return (
@@ -44,7 +39,7 @@ const Date = () => {
   return (
     <Flex>
       {date?.map((d,i) => {
-        return (<Button variant={dataSel==d.id?'solid':'outline'} bgColor={dataSel==d.id?'magenta':null} key={i} data={d.prodotti} onClick={()=>setDataSel(d.id)}>
+        return (<Button mr='2' variant={dataSel==d.id?'solid':'outline'} bgColor={dataSel==d.id?'magenta':null} key={i} data={d.prodotti} onClick={()=>setDataSel(d.id)}>
           {dayjs(d.data).format('DD MMM')}
         </Button>)
       }

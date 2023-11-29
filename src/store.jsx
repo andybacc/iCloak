@@ -5,13 +5,16 @@ import _ from 'lodash'
 const initialState = {
     registro: [],
     date: [],
-    inizialeG: localStorage.getItem('inizialeG') || 1,
-    inizialeB: localStorage.getItem('inizialeB') || 1,
+    iniziali: localStorage.getItem('iniziali')!=='undefined' ? JSON.parse(localStorage.getItem('iniziali')) : {'G': 1, 'B': 1},
     printer: JSON.parse(localStorage.getItem('printer')) || '',
 }
 
 const useStore = create((set) => ({
     ...initialState,
+    getIniziali: () => {
+        var tmp = localStorage.getItem('iniziali')!=='undefined' ? JSON.parse(localStorage.getItem('iniziali')) : {'G': 1, 'B': 1}
+        set((state)=> ({...state, iniziali: tmp}))
+    },
     setDate: (payload) => set((state) => {
         return {
             ...state,
@@ -36,33 +39,17 @@ const useStore = create((set) => ({
             registro: _.drop(state.registro),
         }
     }),
-    resetNumbers: (dataSel) => {
-        apiClient.post(`/archive/` + dataSel)
-        .then((r) => {
-            alert('Reset numbers')
-            set((state)=> ({...state, registro: []}))
-        })
-        .catch((e) => {
-            console.log(e)
-        })
-    },
-    archiveData: (dataSel) => {
-        apiClient.post(`/archive/` + dataSel)
-        .then((r) => {
-            alert('Data archiviata')
-            set((state)=> ({...state, registro: []}))
-        })
-        .catch((e) => {
-            console.log(e)
-        })
-    },
-    setIniziale: (payload) => set((state) => {
-        localStorage.setItem('inizialeG', payload.inizialeG)
-        localStorage.setItem('inizialeB', payload.inizialeB)
+    resetNumbers: (dataSel) => set((state) => {
         return {
             ...state,
-            inizialeG: payload.inizialeG,
-            inizialeB: payload.inizialeB,
+            registro: _.reject(state.registro, {data: dataSel}),
+        }
+    }),
+    setIniziali: (payload) => set((state) => {
+        localStorage.setItem('iniziali', JSON.stringify(payload))
+        return {
+            ...state,
+            iniziali: payload,
         }
     }),
     setPrinter: (payload) => set((state) => {
@@ -72,5 +59,14 @@ const useStore = create((set) => ({
             printer: payload,
         }
     }),
+    fetchDate: () => {
+        apiClient.get(`/date/1`)
+        .then((r) => {
+            set((state)=> ({...state, date: r.data}))
+        })
+        .catch((e) => {
+            console.log(e)
+        })
+    }
 }))
 export default useStore
