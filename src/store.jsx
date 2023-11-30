@@ -20,7 +20,8 @@ const useStore = create((set) => ({
     }),
     getRange: () => {
         var localS = localStorage.getItem('range')
-        var myRange = (localS)? JSON.parse(localS) : {'G': {min: 1, max: 9999}, 'B': {min: 1, max: 9999}}
+        var myRange = (localS && localS!=='undefined')? JSON.parse(localS) : {'G': {min: 1, max: 9999}, 'B': {min: 1, max: 9999}}
+        console.log(myRange)
         set((state)=> ({...state, range: myRange}))
     },
     setDate: (payload) => set((state) => {
