@@ -21,11 +21,11 @@ const Print = () => {
 
     const Stampa = (num,type,reprint) => {
         if (num==0) {
-            toast({ title: 'Inserire un numero', status: 'error', isClosable: true })
+            toast({ title: 'Inserire un numero', status: 'warning', isClosable: true })
             return
         }
         if (printer.ip=='') {
-            toast({ title: 'Selezionare una stampante', status: 'error', isClosable: true })
+            toast({ title: 'Impostare valori stampante', status: 'error', isClosable: true })
             return
         }
         var myRange = (type=='giacca')?range.G:range.B

@@ -6,7 +6,7 @@ const initialState = {
     registro: [],
     date: [],
     range: null,
-    printer: JSON.parse(localStorage.getItem('printer')) || '',
+    printer: JSON.parse(localStorage.getItem('printer')) || {nome: '', ip: '', active: false},
 }
 
 const useStore = create((set) => ({
@@ -21,7 +21,6 @@ const useStore = create((set) => ({
     getRange: () => {
         var localS = localStorage.getItem('range')
         var myRange = (localS && localS!=='undefined')? JSON.parse(localS) : {'G': {min: 1, max: 9999}, 'B': {min: 1, max: 9999}}
-        console.log(myRange)
         set((state)=> ({...state, range: myRange}))
     },
     setDate: (payload) => set((state) => {

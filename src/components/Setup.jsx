@@ -1,12 +1,18 @@
 import {
-  Flex, Box, Button, Divider, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, HStack, VStack
+  Box, Button, Divider,
+  HStack,
+  Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay,
+  Text,
+  VStack
 } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/toast'
 import React, { useState } from 'react'
-import { BsCalendar2DateFill } from 'react-icons/bs'
 import apiClient from '../services/apiClient'
 import useStore from '../store'
+import Printer from './Printer'
 import Range from './Range'
+import NuovaData from './NuovaData'
+
 import _ from 'lodash'
 
 const MyModal = ({isOpen,onClose}) => {
@@ -101,95 +107,6 @@ const MyModal = ({isOpen,onClose}) => {
       </ModalContent>
     </Modal>
   )
-}
-
-const NuovaData = ({onClose}) => {
-  const [newData, setNewData] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const { fetchDate } = useStore()
-  const toast = useToast()
-
-  function createNewDate() {
-    if (newData!='') {
-      setIsLoading(true)
-      apiClient.post(`/date`, {data: newData})
-      .then((r) => {
-        toast({ title: 'Data creata con successo', status: 'success', isClosable: true })
-        setTimeout(() => {
-          fetchDate();
-          setIsLoading(false)
-          onClose()
-        }, 500);
-      })
-      .catch((e) => {
-        toast({
-            title: (e?.response?.data ? e.response.data.error : e),
-            status: 'error',
-            isClosable: true
-        })
-        setIsLoading(false)
-      })
-    } else {
-      toast({
-        title: 'Seleziona una data',
-        status: 'error', 
-        isClosable: true
-    })
-}
-  }
-  return (
-    <>
-      <Text fontSize='2xl'>Nuova data</Text>
-      <InputGroup>
-        <InputLeftAddon children={<BsCalendar2DateFill />} size='md' />
-        <Input id='data'
-          placeholder="Scegli data"
-          size="md"
-          type="date" 
-          onChange={(e) => setNewData(e.target.value) }
-        />
-      </InputGroup>
-      <Button size='lg' onClick={()=>createNewDate()} isLoading={isLoading}>Crea</Button>
-      <Divider my='1'/>
-    </>
-  )
-}
-
-const Printer = ({onClose}) => {
-  const { printer, setPrinter } = useStore()
-  const [isLoading, setIsLoading] = useState(false)
-  const [nome, setNome] = useState(printer?.nome || '')
-  const [ip, setIp] = useState(printer?.ip || '')
-
-  function aggiornaPrinter() {
-      setPrinter({nome: nome,ip: ip})
-      setIsLoading(true)
-      setTimeout(() => {
-          onClose()
-      }, 500);
-  }
-
-  return <>
-    <Text fontSize='2xl'>Stampante</Text>
-    <Flex>
-    <InputGroup>
-      <InputLeftAddon children='Nome' size='md' />
-      <Input id='nomePrinter' placeholder="Nome stampante" size="md" type="text" 
-        value={nome}
-        onChange={(e) => setNome(e.target.value)}
-      />
-    </InputGroup>
-    <InputGroup>
-      <InputLeftAddon children='IP' size='md' />
-      <Input id='ipPrinter' placeholder="IP stampante" size="md" type="text"
-        value={ip}
-        onChange={(e) => setIp(e.target.value)}
-      />
-    </InputGroup>
-    </Flex>
-    <Button size='lg' onClick={()=>aggiornaPrinter()} isLoading={isLoading}>Aggiorna</Button>
-    <Divider my='1'/>
-  </>
 }
 
 export default MyModal

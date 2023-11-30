@@ -6,18 +6,23 @@ import { useToast } from '@chakra-ui/toast'
 const Range = () => {
   const { range, setRange } = useStore()
   const [intervallo, setIntervallo] = useState(range)
+  const [isLoading, setLoading] = useState(false)
   const toast = useToast()
   
   function saveRange() {
+    setLoading(true)
     setRange(intervallo)
-    toast({ title: 'Range impostato', status: 'success', isClosable: true })
+    setTimeout(() => {
+      toast({ title: 'Range impostato', status: 'success', isClosable: true })
+      setLoading(false)
+    }, 300);
   }
 
   return (
   <VStack>
   <Center textAlign='center'>
     <VStack>
-      <Text fontSize='lg'>Range giacche</Text>
+      <Text fontSize='2xl'>Range giacche</Text>
       <Card minW='200px' mx='2'>
         <CardBody textAlign='center' >
           <Flex>
@@ -44,7 +49,7 @@ const Range = () => {
     </VStack>
 
       <VStack>
-        <Text fontSize='lg'>Range borse</Text>
+        <Text fontSize='2xl'>Range borse</Text>
         <Card minW='200px' mx='2'>
           <CardBody textAlign='center' >
             <Flex>
@@ -70,7 +75,7 @@ const Range = () => {
         </Card>
       </VStack>
   </Center>
-  <Button variant='solid' color='teal' size='sm' onClick={()=>saveRange()}>Aggiorna</Button>
+  <Button size='lg' isLoading={isLoading} onClick={()=>saveRange()}>Aggiorna</Button>
   </VStack>
 )
 }
