@@ -47,10 +47,10 @@ const useStore = create((set) => ({
             registro: _.drop(state.registro),
         }
     }),
-    resetNumbers: (dataSel) => set((state) => {
+    resetNumbers: () => set((state) => {
         return {
             ...state,
-            registro: _.reject(state.registro, {data: dataSel}),
+            registro: _.reject(state.registro, {data: state.dataSel}),
         }
     }),
     setPrinter: (payload) => set((state) => {

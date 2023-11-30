@@ -117,16 +117,21 @@ const Modulo = ({type, num, Stampa, isLoading}) => {
     return (
     <VStack>
         <Card textAlign={'center'} mr='3' >
-            <CardHeader bgColor="grey" textTransform='uppercase'>{type==='giacca'?<GiMonclerJacket />:<FaShoppingBag />} {type}</CardHeader>
+            <CardHeader bgColor="grey" textTransform='uppercase'>{type}</CardHeader>
             <CardBody >
-                <Heading as="h1" fontSize="5rem" p='6'>{isLoading.status && isLoading.type==type?<Spinner size='xl' />:num}</Heading>
+                <Heading as="h1" fontSize="5rem" p='6'>{isLoading.status && isLoading.type==type?<Spinner size='xl' />: (type==='giacca'?'G - ':'B - ') + num}</Heading>
                 <Text size='small' p='1'>prossimo numero</Text>
             </CardBody>
             <CardFooter p='1'>
                 <Ristampa num={num} type={type} Stampa={Stampa} isLoading={isLoading} />
             </CardFooter>
         </Card>
-        <Button isDisabled={isLoading.status && isLoading.type==type} variant='solid' bgColor={color(type)} w='150px' h='150px' onClick={()=>Stampa(num,type,false)} textTransform='uppercase'>{type}</Button>
+        <Button isDisabled={isLoading.status && isLoading.type==type} variant='solid' bgColor={color(type)} w='150px' h='150px' onClick={()=>Stampa(num,type,false)} textTransform='uppercase'>
+            {type==='giacca'
+            ?<GiMonclerJacket fontSize='5rem' />
+            :<FaShoppingBag fontSize='5rem' />
+            }
+        </Button>
     </VStack>
     )
 }
