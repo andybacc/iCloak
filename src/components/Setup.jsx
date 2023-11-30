@@ -6,7 +6,7 @@ import React, { useState } from 'react'
 import { BsCalendar2DateFill } from 'react-icons/bs'
 import apiClient from '../services/apiClient'
 import useStore from '../store'
-import Iniziali from './Iniziali'
+import Range from './Range'
 import _ from 'lodash'
 
 const MyModal = ({isOpen,onClose}) => {
@@ -91,7 +91,7 @@ const MyModal = ({isOpen,onClose}) => {
             </HStack>
             }
             <Divider my='1'/>
-            <Iniziali />
+            <Range />
             <Divider my='1'/>
             <NuovaData onClose={onClose}/>
             <Printer onClose={onClose} />

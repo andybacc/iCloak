@@ -6,14 +6,16 @@ import useStore from '../store'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import apiClient from '../services/apiClient'
+import { GiMonclerJacket } from 'react-icons/gi'
+import { FaShoppingBag } from 'react-icons/fa'
 
 function color(type) {
     return (type=='giacca')?'blue.400':'teal.400'
 }
 const Print = () => {
-    const { dataSel, iniziali, printer, registro, setRegistro } = useStore()
-    const [lastNumG, setLastNumG] = useState(iniziali?.G)
-    const [lastNumB, setLastNumB] = useState(iniziali?.B)
+    const { dataSel, range, printer, registro, setRegistro } = useStore()
+    const [lastNumG, setLastNumG] = useState(1)
+    const [lastNumB, setLastNumB] = useState(1)
     const [isLoading, setIsLoading] = useState({status: false, type: ''})
     const toast = useToast()
 
@@ -26,9 +28,14 @@ const Print = () => {
             toast({ title: 'Selezionare una stampante', status: 'error', isClosable: true })
             return
         }
-        var min = (type=='giacca')?iniziali.G:iniziali.B
-        if (num<min) {
-            toast({ title: 'Numero inferiore a quello iniziale', status: 'error', isClosable: true })
+        var myRange = (type=='giacca')?range.G:range.B
+
+        if (num<myRange.min) {
+            toast({ title: 'Numero inferiore al minimo', status: 'error', isClosable: true })
+            return
+        }
+        if (num>myRange.max) {
+            toast({ title: 'Numero superiore al massimo', status: 'error', isClosable: true })
             return
         }
         setIsLoading({status: true, type: type})
@@ -74,11 +81,11 @@ const Print = () => {
     useEffect(() => {
         var giacche = _.find(registro, {type: 'giacca', reprint: 0})
         var borse = _.find(registro, {type: 'borsa', reprint: 0})
-        
-        setLastNumG(giacche? giacche.numero+1 : iniziali.G)
-        setLastNumB(borse? borse.numero+1 : iniziali.B)
+
+        setLastNumG(giacche? giacche.numero+1 : range.G.min)
+        setLastNumB(borse? borse.numero+1 : range.B.min)
         setIsLoading({status: false, type: ''})
-    }, [registro,iniziali])
+    }, [registro,range])
 
     return (
         <Container p='4' minW='800px'>
@@ -110,7 +117,7 @@ const Modulo = ({type, num, Stampa, isLoading}) => {
     return (
     <VStack>
         <Card textAlign={'center'} mr='3' >
-            <CardHeader bgColor="grey" textTransform='uppercase'>{type}</CardHeader>
+            <CardHeader bgColor="grey" textTransform='uppercase'>{type==='giacca'?<GiMonclerJacket />:<FaShoppingBag />} {type}</CardHeader>
             <CardBody >
                 <Heading as="h1" fontSize="5rem" p='6'>{isLoading.status && isLoading.type==type?<Spinner size='xl' />:num}</Heading>
                 <Text size='small' p='1'>prossimo numero</Text>

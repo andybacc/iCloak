@@ -5,15 +5,23 @@ import _ from 'lodash'
 const initialState = {
     registro: [],
     date: [],
-    iniziali: localStorage.getItem('iniziali')!=='undefined' ? JSON.parse(localStorage.getItem('iniziali')) : {'G': 1, 'B': 1},
+    range: null,
     printer: JSON.parse(localStorage.getItem('printer')) || '',
 }
 
 const useStore = create((set) => ({
     ...initialState,
-    getIniziali: () => {
-        var tmp = localStorage.getItem('iniziali')!=='undefined' ? JSON.parse(localStorage.getItem('iniziali')) : {'G': 1, 'B': 1}
-        set((state)=> ({...state, iniziali: tmp}))
+    setRange: (payload) => set((state) => {
+        localStorage.setItem('range', JSON.stringify(payload))
+        return {
+            ...state,
+            range: payload,
+        }
+    }),
+    getRange: () => {
+        var localS = localStorage.getItem('range')
+        var myRange = (localS)? JSON.parse(localS) : {'G': {min: 1, max: 9999}, 'B': {min: 1, max: 9999}}
+        set((state)=> ({...state, range: myRange}))
     },
     setDate: (payload) => set((state) => {
         return {
@@ -43,13 +51,6 @@ const useStore = create((set) => ({
         return {
             ...state,
             registro: _.reject(state.registro, {data: dataSel}),
-        }
-    }),
-    setIniziali: (payload) => set((state) => {
-        localStorage.setItem('iniziali', JSON.stringify(payload))
-        return {
-            ...state,
-            iniziali: payload,
         }
     }),
     setPrinter: (payload) => set((state) => {

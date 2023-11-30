@@ -10,13 +10,13 @@ import dayjs from 'dayjs'
 import useStore from '../store'
 
 const Emissione = () => {
-  const { dataSel, getIniziali } = useStore()
+  const { dataSel, getRange } = useStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { fetchDate } = useStore()
 
   useEffect(() => {
     fetchDate()
-    getIniziali()
+    getRange()
   }, [])
 
   return (
