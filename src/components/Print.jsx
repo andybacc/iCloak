@@ -45,8 +45,7 @@ const Print = () => {
             'loop': 1,
             'type':type,
             'reprint': reprint,
-            'venue': printer.nome,
-            'ip': printer.ip
+            'printer': printer
         }
 
         apiClient.post(`/print/` + dataSel, record)
@@ -55,7 +54,7 @@ const Print = () => {
                 numero: num,
                 type: type,
                 data: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-                reprint: reprint?1:0,
+                reprint: reprint?1:0
             }
             setRegistro(_.concat(record, registro))
         })
@@ -88,11 +87,11 @@ const Print = () => {
     }, [registro,range])
 
     return (
-        <Container p='4' minW='800px'>
+        <Container p='4' minW='1000px'>
             <Flex>
-                <Modulo w='40%' type='giacca' num={lastNumG} Stampa={Stampa} isLoading={isLoading} />
-                <Modulo w='40%' type='borsa' num={lastNumB} Stampa={Stampa} isLoading={isLoading} />
-                <Registro w='20%' registro={registro} />
+                <Modulo type='giacca' num={lastNumG} Stampa={Stampa} isLoading={isLoading} />
+                <Modulo type='borsa' num={lastNumB} Stampa={Stampa} isLoading={isLoading} />
+                <Registro registro={registro} />
             </Flex>
 
         </Container>
@@ -116,10 +115,10 @@ const Registro = ({registro}) => {
 const Modulo = ({type, num, Stampa, isLoading}) => {
     return (
     <VStack>
-        <Card textAlign={'center'} mr='3' >
+        <Card textAlign={'center'} mr='3' minW='400px'>
             <CardHeader bgColor="grey" textTransform='uppercase'>{type}</CardHeader>
             <CardBody >
-                <Heading as="h1" fontSize="5rem" p='6'>{isLoading.status && isLoading.type==type?<Spinner size='xl' />: (type==='giacca'?'G - ':'B - ') + num}</Heading>
+                <Heading as="h1" fontSize="5rem" p='6'>{type==='giacca'?'G - ':'B - '} {(isLoading.status && isLoading.type==type)?<Spinner size='xl' /> : num}</Heading>
                 <Text size='small' p='1'>prossimo numero</Text>
             </CardBody>
             <CardFooter p='1'>
