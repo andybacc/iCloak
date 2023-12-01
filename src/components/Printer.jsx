@@ -1,4 +1,4 @@
-import { useToast, Button, Divider, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftAddon, Switch, Text } from '@chakra-ui/react'
+import { Button, Divider, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftAddon, Select, Switch, Text, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import useStore from '../store'
 
@@ -9,6 +9,7 @@ const Printer = ({onClose}) => {
     const [isInvalid, setIsInvalid] = useState({nome: false, ip: false})
     const [nome, setNome] = useState(printer?.nome || '')
     const [ip, setIp] = useState(printer?.ip || '')
+    const [lang, setLang] = useState(printer?.lang || 'it')
     const toast = useToast()
 
     function aggiornaPrinter() {
@@ -18,11 +19,12 @@ const Printer = ({onClose}) => {
             return
         }
         setIsInvalid({nome: false, ip: false})
-        setPrinter({nome: nome, ip: ip, active: toPrinter})
+        setPrinter({nome: nome, ip: ip, lang: lang, active: toPrinter})
         setIsLoading(true)
         setTimeout(() => {
             toast({ title: 'Stampante aggiornata', status: 'success', isClosable: true })
             setIsLoading(false)
+            onClose()
         }, 300);
     }
 
@@ -54,6 +56,13 @@ const Printer = ({onClose}) => {
                 />
             </InputGroup>
         </Flex>
+        <FormControl display='flex' alignItems='center'>
+            <FormLabel htmlFor='langPrinter' mb='0'>Lingua</FormLabel>
+            <Select id='langPrinter' placeholder="Seleziona lingua" size="md" onChange={(e)=>setLang(e.target.value)}>
+                <option value='it'>Italiano</option>
+                <option value='en'>English</option>
+            </Select>
+        </FormControl>
         </>}
         <Button size='lg' onClick={()=>aggiornaPrinter()} isLoading={isLoading}>Aggiorna</Button>
       <Divider my='1'/>

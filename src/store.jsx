@@ -6,7 +6,7 @@ const initialState = {
     registro: [],
     date: [],
     range: null,
-    printer: JSON.parse(localStorage.getItem('printer')) || {nome: '', ip: '', active: false},
+    printer: JSON.parse(localStorage.getItem('printer')) || {nome: '', ip: '', lang: 'it', active: false},
 }
 
 const useStore = create((set) => ({
@@ -54,6 +54,7 @@ const useStore = create((set) => ({
         }
     }),
     setPrinter: (payload) => set((state) => {
+        console.log(payload)
         localStorage.setItem('printer', JSON.stringify(payload))
         return {
             ...state,

@@ -24,12 +24,12 @@ const Print = () => {
             toast({ title: 'Inserire un numero', status: 'warning', isClosable: true })
             return
         }
-        if (printer.ip=='') {
+        if (printer.active && printer.ip=='') {
             toast({ title: 'Impostare valori stampante', status: 'error', isClosable: true })
             return
         }
-        var myRange = (type=='giacca')?range.G:range.B
 
+        var myRange = (type=='giacca')?range.G:range.B
         if (num<myRange.min) {
             toast({ title: 'Numero inferiore al minimo', status: 'error', isClosable: true })
             return
@@ -118,7 +118,7 @@ const Modulo = ({type, num, Stampa, isLoading}) => {
         <Card textAlign={'center'} mr='3' minW='400px'>
             <CardHeader bgColor="grey" textTransform='uppercase'>{type}</CardHeader>
             <CardBody >
-                <Heading as="h1" fontSize="5rem" p='6'>{type==='giacca'?'G - ':'B - '} {(isLoading.status && isLoading.type==type)?<Spinner size='xl' /> : num}</Heading>
+                <Heading as="h1" fontSize="5rem" p='6'>{(isLoading.status && isLoading.type==type)?<Spinner size='xl' /> : num}</Heading>
                 <Text size='small' p='1'>prossimo numero</Text>
             </CardBody>
             <CardFooter p='1'>
