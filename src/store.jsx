@@ -6,11 +6,27 @@ const initialState = {
     registro: [],
     date: [],
     range: null,
-    printer: JSON.parse(localStorage.getItem('printer')) || {nome: '', ip: '', lang: 'it', active: false},
+    postazione: localStorage.getItem('postazione') || 'postazione1',
+    prezzi: JSON.parse(localStorage.getItem('prezzi')) || {giacca: 3, borsa: 2},
+    stampanti: JSON.parse(localStorage.getItem('stampanti')) || {ricevuta: {nome: '', ip: '', lang: 'it', active: false}, fiscale: {nome: '', ip: '', active: false}},
 }
 
 const useStore = create((set) => ({
     ...initialState,
+    setPostazione: (payload) => set((state) => {
+        localStorage.setItem('postazione', payload)
+        return {
+            ...state,
+            postazione: payload,
+        }
+    }),
+    setPrezzi: (payload) => set((state) => {
+        localStorage.setItem('prezzi', JSON.stringify(payload))
+        return {
+            ...state,
+            prezzi: payload,
+        }
+    }),
     setRange: (payload) => set((state) => {
         localStorage.setItem('range', JSON.stringify(payload))
         return {
@@ -53,12 +69,11 @@ const useStore = create((set) => ({
             registro: _.reject(state.registro, {data: state.dataSel}),
         }
     }),
-    setPrinter: (payload) => set((state) => {
-        console.log(payload)
-        localStorage.setItem('printer', JSON.stringify(payload))
+    setStampanti: (payload) => set((state) => {
+        localStorage.setItem('stampanti', JSON.stringify(payload))
         return {
             ...state,
-            printer: payload,
+            stampanti: payload,
         }
     }),
     fetchDate: () => {
@@ -69,6 +84,13 @@ const useStore = create((set) => ({
         .catch((e) => {
             console.log(e)
         })
-    }
+    },
+    setServer: (payload) => set((state) => {
+        localStorage.setItem('server', payload)
+        return {
+            ...state,
+            server: payload,
+        }
+    }),
 }))
 export default useStore

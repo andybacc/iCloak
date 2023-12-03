@@ -1,31 +1,27 @@
 import { Heading } from '@chakra-ui/layout'
-import { useToast } from '@chakra-ui/toast'
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Input, InputGroup, InputRightElement, ListItem, Spinner, Text, UnorderedList, VStack } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/toast'
 import dayjs from 'dayjs'
-import useStore from '../store'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
-import apiClient from '../services/apiClient'
-import { GiMonclerJacket } from 'react-icons/gi'
 import { FaShoppingBag } from 'react-icons/fa'
+import { GiMonclerJacket } from 'react-icons/gi'
+import apiClient from '../services/apiClient'
+import useStore from '../store'
 
 function color(type) {
     return (type=='giacca')?'blue.400':'teal.400'
 }
 const Print = () => {
-    const { dataSel, range, printer, registro, setRegistro } = useStore()
+    const { dataSel, prezzi, range, stampanti, registro, setRegistro } = useStore()
     const [lastNumG, setLastNumG] = useState(1)
     const [lastNumB, setLastNumB] = useState(1)
     const [isLoading, setIsLoading] = useState({status: false, type: ''})
     const toast = useToast()
 
-    const Stampa = (num,type,reprint) => {
+    const Stampa = (num,type,reprint=false) => {
         if (num==0) {
             toast({ title: 'Inserire un numero', status: 'warning', isClosable: true })
-            return
-        }
-        if (printer.active && printer.ip=='') {
-            toast({ title: 'Impostare valori stampante', status: 'error', isClosable: true })
             return
         }
 
@@ -43,9 +39,10 @@ const Print = () => {
         var record = {
             'numero': parseInt(num),
             'loop': 1,
-            'type':type,
-            'reprint': reprint,
-            'printer': printer
+            'type': type,
+            'prezzo': prezzi[type],
+            'reprint': reprint?1:0,
+            'stampanti': stampanti,
         }
 
         apiClient.post(`/print/` + dataSel, record)
@@ -56,7 +53,9 @@ const Print = () => {
                 data: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                 reprint: reprint?1:0
             }
-            setRegistro(_.concat(record, registro))
+            setTimeout(() => {
+                setRegistro(_.concat(record, registro))
+            }, 200);
         })
         .catch((e) => {
             setIsLoading({status: false, type: ''})
@@ -81,8 +80,14 @@ const Print = () => {
         var giacche = _.find(registro, {type: 'giacca', reprint: 0})
         var borse = _.find(registro, {type: 'borsa', reprint: 0})
 
-        setLastNumG(giacche? giacche.numero+1 : range.G.min)
-        setLastNumB(borse? borse.numero+1 : range.B.min)
+        var ultimaGiacca = giacche? giacche.numero+1 : range.G.min
+        var ultimaBorsa = borse? borse.numero+1 : range.B.min
+
+        if (ultimaGiacca<range.G.min) ultimaGiacca = range.G.min
+        if (ultimaBorsa<range.B.min) ultimaBorsa = range.B.min
+
+        setLastNumG(ultimaGiacca)
+        setLastNumB(ultimaBorsa)
         setIsLoading({status: false, type: ''})
     }, [registro,range])
 
@@ -101,7 +106,7 @@ const Registro = ({registro}) => {
     return (
         <Box h='75vh' overflow='hidden' >
             <UnorderedList styleType={'none'}>
-            {registro.map((i, index) => 
+            {registro.map((i, index) =>                 
                 <ListItem key={index} bgColor={color(i.type)} p='0.5' px='2'>
                     <Box as="small">{i.reprint?'(R)':''} </Box>
                     <Box as="b">{i.numero} </Box>
