@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: ((location.host.includes('localhost'))
-    ?'http://molocinque.ns0.it/node/iguardaroba2'
+  baseURL: (location.host.includes('localhost')
+    ?'http://192.168.1.2/node/iguardaroba2'
     :'/node/iguardaroba2'),
   headers: {
       'Accept': 'application/json',

@@ -19,7 +19,7 @@ const MyModal = ({isOpen,onClose}) => {
 
   function resettaNumeri() {
     setIsLoading({status: true, type: 'resetta'})
-    apiClient.delete(`/reset/` + dataSel)
+    apiClient.delete(`/reset/` + dataSel.id)
     .then((r) => {
         toast({ title: 'Numeri resettati', status: 'success', isClosable: true })
         setTimeout(() => {
@@ -52,12 +52,12 @@ const MyModal = ({isOpen,onClose}) => {
   }
   function archiveData() {
     setIsLoading({status: true, type: 'archive'})
-    apiClient.put(`/archive/` + dataSel)
+    apiClient.put(`/archive/` + dataSel.id)
     .then((r) => {
         toast({ title: 'Data archiviata', status: 'success', isClosable: true })
         setTimeout(() => {
             setIsLoading({status: false, type: ''})
-            setDate(_.reject(date, {id: dataSel}))
+            setDate(_.reject(date, {id: dataSel.id}))
             setDataSel(null)
             onClose()
         }, 500);

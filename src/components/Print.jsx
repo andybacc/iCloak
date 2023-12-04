@@ -13,10 +13,10 @@ function color(type) {
     return (type=='giacca')?'blue.400':'teal.400'
 }
 const Print = () => {
-    const { dataSel, prezzi, range, stampanti, registro, setRegistro } = useStore()
+    const { postazione, dataSel, prezzi, range, stampanti, registro, setRegistro } = useStore()
     const [lastNumG, setLastNumG] = useState(1)
     const [lastNumB, setLastNumB] = useState(1)
-    const [isLoading, setIsLoading] = useState({status: false, type: ''})
+    const [isLoading, setIsLoading] = useState({status: true, type: 'numeri'})
     const toast = useToast()
 
     const Stampa = (num,type,reprint=false) => {
@@ -43,9 +43,10 @@ const Print = () => {
             'prezzo': prezzi[type],
             'reprint': reprint?1:0,
             'stampanti': stampanti,
+            'postazione': postazione
         }
 
-        apiClient.post(`/print/` + dataSel, record)
+        apiClient.post(`/print/` + dataSel?.id, record)
         .then((r) => {
             var record = {
                 numero: num,
@@ -67,11 +68,13 @@ const Print = () => {
         })
     }
     useEffect(() => {
-        apiClient.get(`/last/` + dataSel)
+        apiClient.get(`/registro/${dataSel.id}/${postazione}`)
         .then((r) => {
             setRegistro(r.data)
+            setIsLoading({status: false, type: ''})
         })
         .catch((e) => {
+            setIsLoading({status: false, type: ''})
             toast({ title: e.response.data.error, status: 'error', isClosable: true })
         })
     }, [dataSel] )
@@ -91,6 +94,7 @@ const Print = () => {
         setIsLoading({status: false, type: ''})
     }, [registro,range])
 
+    if (!dataSel) return <Heading>Seleziona una data</Heading>
     return (
         <Container p='4' minW='1000px'>
             <Flex>
@@ -123,7 +127,7 @@ const Modulo = ({type, num, Stampa, isLoading}) => {
         <Card textAlign={'center'} mr='3' minW='400px'>
             <CardHeader bgColor="grey" textTransform='uppercase'>{type}</CardHeader>
             <CardBody >
-                <Heading as="h1" fontSize="5rem" p='6'>{(isLoading.status && isLoading.type==type)?<Spinner size='xl' /> : num}</Heading>
+                <Heading as="h1" fontSize="5rem" p='6'>{(isLoading.status && (isLoading.type==type || isLoading.type=='numeri'))?<Spinner size='xl' /> : num}</Heading>
                 <Text size='small' p='1'>prossimo numero</Text>
             </CardBody>
             <CardFooter p='1'>

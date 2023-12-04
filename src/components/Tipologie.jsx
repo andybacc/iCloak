@@ -3,7 +3,7 @@ import { useToast } from '@chakra-ui/toast'
 import React, { useState } from 'react'
 import useStore from '../store'
 
-const Tipologie = () => {
+const Tipologie = ({onClose}) => {
   const { prezzi, setPrezzi, range, setRange } = useStore()
   const [intervallo, setIntervallo] = useState(range)
 
@@ -15,8 +15,9 @@ const Tipologie = () => {
     setRange(intervallo)
     setPrezzi(prezzi)
     setTimeout(() => {
-      toast({ title: 'Tipologie impostato', status: 'success', isClosable: true })
+      toast({ title: 'Tipologie impostate', status: 'success', isClosable: true })
       setLoading(false)
+      onClose()
     }, 300);
   }
 

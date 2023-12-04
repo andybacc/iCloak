@@ -1,9 +1,8 @@
-import { Divider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react'
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react'
 import React from 'react'
-import NuovaData from './NuovaData'
 import Postazione from './Postazione'
-import Tipologie from './Tipologie'
 import Stampanti from './Stampanti'
+import Tipologie from './Tipologie'
 
 const MyModal = ({isOpen,onClose}) => {
 
@@ -16,8 +15,7 @@ const MyModal = ({isOpen,onClose}) => {
         <ModalBody>
           <VStack textAlign='center'>
             <Postazione onClose={onClose}/>
-            <Tipologie />
-            <NuovaData onClose={onClose}/>
+            <Tipologie  onClose={onClose}/>
             <Stampanti onClose={onClose}/>
           </VStack>
 
