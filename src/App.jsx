@@ -8,6 +8,7 @@ import { useToast } from "@chakra-ui/react"
 
 function App() {
   const { getRange, fetchDate } = useStore()
+  const { dataSel } = useStore()
   const toast = useToast()
 
   useEffect(() => {
@@ -16,10 +17,7 @@ function App() {
 
   return (
     <ChakraProvider>
-      <Routes>
-        <Route path="/" element={<Date />} />
-        <Route path="/:id" element={<Emissione />} />
-      </Routes>
+      {dataSel? <Emissione /> : <Date />}
     </ChakraProvider>
   )
 }

@@ -1,6 +1,5 @@
 import { Button, Container, Flex, useDisclosure, useToast } from '@chakra-ui/react'
 import { BsGearFill, BsPerson } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
 
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
@@ -82,17 +81,16 @@ const Date = () => {
 }
 
 const ListaDate = () => {
-  const { date, dataSel } = useStore()
-  const navigate = useNavigate()
+  const { date, dataSel, setDataSel } = useStore()
   
-  function goTo(id) {
-    navigate('/' + id)
+  function goTo(data) {
+    setDataSel(data)
   }
 
   return (
     <>
       {date?.map((d,i) => {
-        return (<Button mr='2' variant={dataSel.id==d.id?'solid':'outline'} bgColor={dataSel.id==d.id?'magenta':null} key={i} data={d.prodotti} onClick={()=>goTo(d.id)}>
+        return (<Button mr='2' variant={dataSel?.id==d.id?'solid':'outline'} bgColor={dataSel?.id==d.id?'magenta':null} key={i} data={d.prodotti} onClick={()=>goTo(d)}>
           {dayjs(d.data).format('DD MMM')}
         </Button>)
       }

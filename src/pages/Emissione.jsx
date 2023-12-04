@@ -2,7 +2,7 @@ import { Heading, Button, Container, Flex, Spacer, Text, useDisclosure, useToast
 import { BsGearFill, BsPerson } from 'react-icons/bs'
 
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import MenuData from '../components/MenuData'
 import NuovaData from '../components/NuovaData'
 import Print from '../components/Print'
@@ -11,8 +11,7 @@ import apiClient from '../services/apiClient'
 import useStore from '../store'
 
 const Emissione = () => {
-  const { id } = useParams()
-  const { date, dataSel, postazione, printer, setDataSel } = useStore()
+  const { dataSel, postazione, printer, setDataSel } = useStore()
   const { isOpen: isMenuOpen, onOpen: onMenuOpen, onClose: onMenuClose } = useDisclosure()
   const { isOpen: isSetupOpen, onOpen: onSetupOpen, onClose: onSetupClose } = useDisclosure()
   const { isOpen: isNDOpen, onOpen: onNDOpen, onClose: onNDClose } = useDisclosure()
@@ -20,7 +19,7 @@ const Emissione = () => {
   const toast = useToast()
  
   useEffect(() => {
-    apiClient.get(`/data/` + id)
+    apiClient.get(`/data/` + dataSel.id)
       .then((r) => {
         setDataSel(r.data)
       })
@@ -31,7 +30,7 @@ const Emissione = () => {
             isClosable: true
         })
       })
-  }, [])
+  }, [dataSel])
 
   function printTest() {
     setIsLoading(true)
@@ -43,7 +42,7 @@ const Emissione = () => {
       'printer': printer,
       'test': true
     }
-    apiClient.post(`/print/` + id, record)
+    apiClient.post(`/print/` + dataSel.id, record)
       .then((r) => {
         setIsLoading(false)
         toast({
