@@ -2,8 +2,7 @@ import { Divider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader,
 import React from 'react'
 import NuovaData from './NuovaData'
 import Postazione from './Postazione'
-import Prezzi from './Prezzi'
-import Range from './Range'
+import Tipologie from './Tipologie'
 import Stampanti from './Stampanti'
 
 const MyModal = ({isOpen,onClose}) => {
@@ -17,13 +16,8 @@ const MyModal = ({isOpen,onClose}) => {
         <ModalBody>
           <VStack textAlign='center'>
             <Postazione onClose={onClose}/>
-            <Divider my='1'/>
-            <Range />
-            <Divider my='1'/>
-            <Prezzi onClose={onClose}/>
-            <Divider my='1'/>
+            <Tipologie />
             <NuovaData onClose={onClose}/>
-            <Divider my='1'/>
             <Stampanti onClose={onClose}/>
           </VStack>
 

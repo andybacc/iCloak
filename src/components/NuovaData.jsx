@@ -52,6 +52,7 @@ const NuovaData = ({onClose}) => {
           />
         </InputGroup>
         <Button size='lg' onClick={()=>createNewDate()} isLoading={isLoading}>Crea</Button>
+        <Divider my='1'/>
       </>
     )
   }

@@ -17,8 +17,15 @@ const Emissione = () => {
   const toast = useToast()
 
   useEffect(() => {
-    fetchDate()
     getRange()
+    fetchDate()
+    .catch((e) => {
+      toast({
+          title: e.message,
+          status: 'error', 
+          isClosable: true
+      })
+    })
   }, [])
 
   function printTest() {

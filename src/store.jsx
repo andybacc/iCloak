@@ -6,7 +6,7 @@ const initialState = {
     registro: [],
     date: [],
     range: null,
-    postazione: localStorage.getItem('postazione') || 'postazione1',
+    postazione: localStorage.getItem('postazione') || 'Cloak1',
     prezzi: JSON.parse(localStorage.getItem('prezzi')) || {giacca: 3, borsa: 2},
     stampanti: JSON.parse(localStorage.getItem('stampanti')) || {ricevuta: {nome: '', ip: '', lang: 'it', active: false}, fiscale: {nome: '', ip: '', active: false}},
 }
@@ -77,12 +77,16 @@ const useStore = create((set) => ({
         }
     }),
     fetchDate: () => {
-        apiClient.get(`/date/1`)
-        .then((r) => {
-            set((state)=> ({...state, date: r.data}))
-        })
-        .catch((e) => {
-            console.log(e)
+        return new Promise((resolve, reject) => {
+                apiClient.get(`/date/1`)
+                .then((r) => {
+                    set((state)=> ({...state, date: r.data}))
+                    resolve()
+                })
+                .catch((e) => {
+                    console.log(e.message)
+                    reject(e)
+                })
         })
     },
     setServer: (payload) => set((state) => {
