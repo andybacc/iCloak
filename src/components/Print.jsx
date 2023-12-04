@@ -20,21 +20,25 @@ const Print = () => {
     const toast = useToast()
 
     const Stampa = (num,type,reprint=false) => {
+        setIsLoading({status: true, type: type})
+
         if (num==0) {
             toast({ title: 'Inserire un numero', status: 'warning', isClosable: true })
+            setIsLoading({status: false, type: ''})
             return
         }
 
         var myRange = (type=='giacca')?range.G:range.B
         if (num<myRange.min) {
             toast({ title: 'Numero inferiore al minimo', status: 'error', isClosable: true })
+            setIsLoading({status: false, type: ''})
             return
         }
         if (num>myRange.max) {
             toast({ title: 'Numero superiore al massimo', status: 'error', isClosable: true })
+            setIsLoading({status: false, type: ''})
             return
         }
-        setIsLoading({status: true, type: type})
 
         var record = {
             'numero': parseInt(num),
@@ -46,7 +50,7 @@ const Print = () => {
             'postazione': postazione
         }
 
-        apiClient.post(`/print/` + dataSel?.id, record)
+        apiClient.post(`/print/` + dataSel.id, record)
         .then((r) => {
             var record = {
                 numero: num,
@@ -54,9 +58,7 @@ const Print = () => {
                 data: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                 reprint: reprint?1:0
             }
-            setTimeout(() => {
-                setRegistro(_.concat(record, registro))
-            }, 200);
+            setRegistro(_.concat(record, registro))
         })
         .catch((e) => {
             setIsLoading({status: false, type: ''})
@@ -91,8 +93,12 @@ const Print = () => {
 
         setLastNumG(ultimaGiacca)
         setLastNumB(ultimaBorsa)
-        setIsLoading({status: false, type: ''})
-    }, [registro,range])
+        
+        setTimeout(() => {
+            console.log('refresh')
+            setIsLoading({status: false, type: ''})
+        }, 100)
+    }, [dataSel, registro])
 
     if (!dataSel) return <Heading>Seleziona una data</Heading>
     return (
@@ -134,7 +140,7 @@ const Modulo = ({type, num, Stampa, isLoading}) => {
                 <Ristampa num={num} type={type} Stampa={Stampa} isLoading={isLoading} />
             </CardFooter>
         </Card>
-        <Button isDisabled={isLoading.status && isLoading.type==type} variant='solid' bgColor={color(type)} w='150px' h='150px' onClick={()=>Stampa(num,type,false)} textTransform='uppercase'>
+        <Button isDisabled={isLoading.status} variant='solid' bgColor={color(type)} w='150px' h='150px' onClick={()=>Stampa(num,type,false)} textTransform='uppercase'>
             {type==='giacca'
             ?<GiMonclerJacket fontSize='5rem' />
             :<FaShoppingBag fontSize='5rem' />

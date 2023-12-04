@@ -30,7 +30,7 @@ const Emissione = () => {
             isClosable: true
         })
       })
-  }, [dataSel])
+  }, [])
 
   function printTest() {
     setIsLoading(true)
