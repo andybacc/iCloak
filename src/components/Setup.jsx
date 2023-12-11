@@ -4,13 +4,13 @@ import Postazione from './Postazione'
 import Stampanti from './Stampanti'
 import Tipologie from './Tipologie'
 
-const MyModal = ({isOpen,onClose}) => {
+const Setup = ({isOpen,onClose}) => {
 
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} size='xl' >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Setup</ModalHeader>
+        <ModalHeader>Impostazioni</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack textAlign='center'>
@@ -25,4 +25,4 @@ const MyModal = ({isOpen,onClose}) => {
   )
 }
 
-export default MyModal
+export default Setup

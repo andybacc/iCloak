@@ -8,6 +8,7 @@ const NuovaData = ({isOpen,onClose}) => {
     const [newData, setNewData] = useState('')
     const [nomeData, setNomeData] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const [isInvalid, setIsInvalid] = useState({nomeData: false, data: false})
     const { fetchDate } = useStore()
     const toast = useToast()
   
@@ -32,12 +33,13 @@ const NuovaData = ({isOpen,onClose}) => {
           setIsLoading(false)
         })
       } else {
+        setIsInvalid({nomeData: nomeData=='', data: newData==''})
         toast({
-          title: (nomeData=='Dai un nome alla serata'?'':'Seleziona data'),
+          title: 'Compila i campi richiesti',
           status: 'error', 
           isClosable: true
-      })
-  }
+        })
+      }
     }
     return (
       <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} size='xl' >
@@ -51,6 +53,7 @@ const NuovaData = ({isOpen,onClose}) => {
               size="md"
               type="text"
               my='3'
+              isInvalid={isInvalid?.nomeData}
               onChange={(e) => setNomeData(e.target.value) }
             />
           <InputGroup>
@@ -59,6 +62,7 @@ const NuovaData = ({isOpen,onClose}) => {
               placeholder="Scegli data"
               size="md"
               type="date" 
+              isInvalid={isInvalid?.data}
               onChange={(e) => setNewData(e.target.value) }
             />
           </InputGroup>

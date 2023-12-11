@@ -1,6 +1,9 @@
 import {
   Box, Button,
+  Divider,
+  FormControl,
   HStack,
+  Input,
   Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay,
   Text,
   VStack
@@ -14,9 +17,33 @@ import useStore from '../store'
 const MyModal = ({isOpen,onClose}) => {
   const { date, setDate, dataSel, registro, setDataSel, delLastNumber, resetNumbers } = useStore()
   const [isLoading, setIsLoading] = useState({status: false, type: ''})
+  const [nomeData, setNomeData] = useState(dataSel?.nome || '')
   const [lastNumber, setLastNumber] = useState(null)
   const toast = useToast()
 
+  function aggiornaNome() {
+    setIsLoading({status: true, type: 'aggiornaNome'})
+    apiClient.put(`/data/` + dataSel.id, {nome: nomeData})
+    .then((r) => {
+        var tmp = dataSel
+        tmp.nome = nomeData
+        var tmpDate = date
+        tmpDate[_.findIndex(tmpDate, {id: dataSel.id})] = tmp
+        setDate(tmpDate)
+        setDataSel(tmp)
+
+        toast({ title: 'Nome data aggiornato', status: 'success', isClosable: true })
+        setTimeout(() => {
+            setIsLoading({status: false, type: ''})
+            onClose()
+        }, 500);
+    })
+    .catch((e) => {
+
+        setIsLoading({status: false, type: ''})
+        toast({ title: (e?.response? e.response.data.error : e.message), status: 'error', isClosable: true })
+    })
+  }
   function resettaNumeri() {
     setIsLoading({status: true, type: 'resetta'})
     apiClient.delete(`/reset/` + dataSel.id)
@@ -54,7 +81,7 @@ const MyModal = ({isOpen,onClose}) => {
     setIsLoading({status: true, type: 'archive'})
     apiClient.put(`/archive/` + dataSel.id)
     .then((r) => {
-        toast({ title: 'Data archiviata', status: 'success', isClosable: true })
+        toast({ title: 'Data ' + dataSel.nome + ' archiviata', status: 'success', isClosable: true })
         setTimeout(() => {
             setIsLoading({status: false, type: ''})
             setDate(_.reject(date, {id: dataSel.id}))
@@ -75,10 +102,21 @@ const MyModal = ({isOpen,onClose}) => {
     <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} size='xl' >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Setup</ModalHeader>
+        <ModalHeader>Menu data</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack textAlign='center'>
+            <FormControl>
+              <Text mb='2'>Nome data</Text>
+              <Input id='nomeData'
+                value={nomeData}
+                onChange={(e) => setNomeData(e.target.value)}
+              />
+              <Button my='3'
+                isLoading={isLoading.status&&isLoading.type=='aggiornaNome'}
+                onClick={()=>aggiornaNome()}>Aggiorna</Button>
+            </FormControl>
+          <Divider my='3'/>
           <HStack>
               <Box w='33%'>
                 <Text mb='2'>Archivia data</Text>

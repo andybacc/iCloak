@@ -1,8 +1,8 @@
-import { Heading, Button, Container, Flex, Spacer, Text, useDisclosure, useToast } from '@chakra-ui/react'
+import { Button, Container, Flex, Heading, Spacer, useDisclosure, useToast } from '@chakra-ui/react'
 import { BsGearFill, BsPerson } from 'react-icons/bs'
 
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { BsChevronLeft } from 'react-icons/bs'
 import MenuData from '../components/MenuData'
 import NuovaData from '../components/NuovaData'
 import Print from '../components/Print'
@@ -67,7 +67,10 @@ const Emissione = () => {
     <>
       <Container p='4' minW='800px'>
         <Flex>
-          <Heading size='md' pt='2.5'>{dataSel.nome}</Heading>
+          <>
+            <Button onClick={()=>setDataSel(null)} mr='4'><BsChevronLeft /></Button>
+            <Heading size='md' pt='2.5'>{dataSel.nome}</Heading>
+          </>
           <Spacer />
           <>
             {printer?.active && <Button mr='2' isLoading={isLoading} variant='solid' onClick={() => printTest()}>Test</Button>}

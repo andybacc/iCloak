@@ -10,7 +10,7 @@ import NuovaData from '../components/NuovaData'
 import useStore from '../store'
 
 const Date = () => {
-  const { postazione, printer, dataSel, fetchDate } = useStore()
+  const { postazione, stampanti, dataSel, fetchDate } = useStore()
   const { isOpen: isMenuOpen, onOpen: onMenuOpen, onClose: onMenuClose } = useDisclosure()
   const { isOpen: isSetupOpen, onOpen: onSetupOpen, onClose: onSetupClose } = useDisclosure()
   const { isOpen: isNDOpen, onOpen: onNDOpen, onClose: onNDClose } = useDisclosure()
@@ -20,7 +20,6 @@ const Date = () => {
   useEffect(() => {
     fetchDate()
     .catch((e) => {
-      console.log(e)
       toast({
           title: e.message,
           status: 'error', 
@@ -60,7 +59,7 @@ const Date = () => {
   return (
     <>
       <Container textAlign={'right'} p='4' minW='800px'>
-        {printer?.active && <Button mr='2' isLoading={isLoading} variant='solid' onClick={() => printTest()}>Test</Button>}
+        {stampanti?.ricevuta?.active && <Button mr='2' isLoading={isLoading} variant='solid' onClick={() => printTest()}>Test</Button>}
           <Button variant='fill' mr='2'><BsPerson />{postazione}</Button>
         {dataSel && <>
           <Button mr='2' variant='solid' onClick={onMenuOpen}>Menu</Button>
@@ -81,17 +80,13 @@ const Date = () => {
 }
 
 const ListaDate = () => {
-  const { date, dataSel, setDataSel } = useStore()
+  const { date, setDataSel } = useStore()
   
-  function goTo(data) {
-    setDataSel(data)
-  }
-
   return (
     <>
       {date?.map((d,i) => {
-        return (<Button mr='2' variant={dataSel?.id==d.id?'solid':'outline'} bgColor={dataSel?.id==d.id?'magenta':null} key={i} data={d.prodotti} onClick={()=>goTo(d)}>
-          {dayjs(d.data).format('DD MMM')}
+        return (<Button mr='2' key={i} data={d.prodotti} onClick={()=>setDataSel(d)}>
+          {d.nome}
         </Button>)
       }
       )}

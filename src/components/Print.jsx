@@ -1,5 +1,5 @@
 import { Heading } from '@chakra-ui/layout'
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Container, Flex, Input, InputGroup, InputRightElement, ListItem, Spinner, Text, UnorderedList, VStack } from '@chakra-ui/react'
+import { Box, Button, Card, Center, CardBody, CardFooter, CardHeader, Container, Flex, Input, InputGroup, InputRightElement, ListItem, Spinner, Text, UnorderedList, VStack } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/toast'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -95,26 +95,26 @@ const Print = () => {
         setLastNumB(ultimaBorsa)
         
         setTimeout(() => {
-            console.log('refresh')
             setIsLoading({status: false, type: ''})
         }, 100)
     }, [dataSel, registro])
 
     if (!dataSel) return <Heading>Seleziona una data</Heading>
     return (
-        <Container p='4' minW='1000px'>
+        <Container>
+        <Center p='4'>
             <Flex>
                 <Modulo type='giacca' num={lastNumG} Stampa={Stampa} isLoading={isLoading} />
                 <Modulo type='borsa' num={lastNumB} Stampa={Stampa} isLoading={isLoading} />
                 <Registro registro={registro} />
             </Flex>
-
+        </Center>
         </Container>
     )
 }
 const Registro = ({registro}) => {
     return (
-        <Box h='75vh' overflow='hidden' >
+        <Box h='75vh' overflow='hidden' minW='125px'>
             <UnorderedList styleType={'none'}>
             {registro.map((i, index) =>                 
                 <ListItem key={index} bgColor={color(i.type)} p='0.5' px='2'>
@@ -130,7 +130,7 @@ const Registro = ({registro}) => {
 const Modulo = ({type, num, Stampa, isLoading}) => {
     return (
     <VStack>
-        <Card textAlign={'center'} mr='3' minW='400px'>
+        <Card textAlign={'center'} mr='3' minW='310px'>
             <CardHeader bgColor="grey" textTransform='uppercase'>{type}</CardHeader>
             <CardBody >
                 <Heading as="h1" fontSize="5rem" p='6'>{(isLoading.status && (isLoading.type==type || isLoading.type=='numeri'))?<Spinner size='xl' /> : num}</Heading>
