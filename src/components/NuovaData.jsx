@@ -61,7 +61,7 @@ const NuovaData = ({isOpen,onClose}) => {
             <Input id='data'
               placeholder="Scegli data"
               size="md"
-              type="date" 
+              type="date"               
               isInvalid={isInvalid?.data}
               onChange={(e) => setNewData(e.target.value) }
             />

@@ -3,6 +3,7 @@ import { BsGearFill, BsPerson } from 'react-icons/bs'
 
 import React, { useEffect, useState } from 'react'
 import { BsChevronLeft } from 'react-icons/bs'
+import { IoMdPrint } from 'react-icons/io'
 import MenuData from '../components/MenuData'
 import NuovaData from '../components/NuovaData'
 import Print from '../components/Print'
@@ -73,8 +74,8 @@ const Emissione = () => {
           </>
           <Spacer />
           <>
-            {printer?.active && <Button mr='2' isLoading={isLoading} variant='solid' onClick={() => printTest()}>Test</Button>}
-            <Button variant='fill' mr='2'><BsPerson />{postazione}</Button>
+            {stampanti?.ricevuta?.active && <Button mr='2' isLoading={isLoading} variant='solid' leftIcon={<IoMdPrint />} onClick={() => printTest()}>Test</Button>}
+            <Button variant='fill' mr='2' color='yellow'><BsPerson />{postazione}</Button>
             {dataSel && <Button mr='2' variant='solid' onClick={onMenuOpen}>Menu</Button> }
             <Button variant='solid' onClick={onSetupOpen} ><BsGearFill /></Button>
           </>

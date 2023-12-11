@@ -1,12 +1,12 @@
 import { Button, Container, Flex, useDisclosure, useToast } from '@chakra-ui/react'
 import { BsGearFill, BsPerson } from 'react-icons/bs'
+import { FaPlus } from 'react-icons/fa'
 
-import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import MenuData from '../components/MenuData'
+import NuovaData from '../components/NuovaData'
 import Setup from '../components/Setup'
 import apiClient from '../services/apiClient'
-import NuovaData from '../components/NuovaData'
 import useStore from '../store'
 
 const Date = () => {
@@ -35,7 +35,7 @@ const Date = () => {
       'loop': 1,
       'type': 'giacca',
       'reprint': false,
-      'printer': printer,
+      'stampanti': stampanti,
       'test': true
     }
     apiClient.post(`/print/` + dataSel.id, record)
@@ -59,8 +59,7 @@ const Date = () => {
   return (
     <>
       <Container textAlign={'right'} p='4' minW='800px'>
-        {stampanti?.ricevuta?.active && <Button mr='2' isLoading={isLoading} variant='solid' onClick={() => printTest()}>Test</Button>}
-          <Button variant='fill' mr='2'><BsPerson />{postazione}</Button>
+        <Button variant='fill' mr='2' color='yellow' ><BsPerson />{postazione}</Button>
         {dataSel && <>
           <Button mr='2' variant='solid' onClick={onMenuOpen}>Menu</Button>
         </>}
@@ -68,7 +67,7 @@ const Date = () => {
       </Container>
       <Container minW='800px'>
         <Flex>
-          <Button mr='2' variant='solid' onClick={onNDOpen}>Nuova data</Button>
+          <Button mr='2' variant='solid' onClick={onNDOpen} leftIcon={<FaPlus />} color={'yellow'}>Nuova data</Button>
           <ListaDate />
         </Flex>
       </Container>

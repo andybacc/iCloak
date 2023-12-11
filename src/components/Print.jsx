@@ -100,8 +100,9 @@ const Print = () => {
     }, [dataSel, registro])
 
     if (!dataSel) return <Heading>Seleziona una data</Heading>
+
     return (
-        <Container>
+    <Container>
         <Center p='4'>
             <Flex>
                 <Modulo type='giacca' num={lastNumG} Stampa={Stampa} isLoading={isLoading} />
@@ -109,7 +110,7 @@ const Print = () => {
                 <Registro registro={registro} />
             </Flex>
         </Center>
-        </Container>
+    </Container>
     )
 }
 const Registro = ({registro}) => {
