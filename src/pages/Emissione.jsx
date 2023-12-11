@@ -11,7 +11,7 @@ import apiClient from '../services/apiClient'
 import useStore from '../store'
 
 const Emissione = () => {
-  const { dataSel, postazione, printer, setDataSel } = useStore()
+  const { dataSel, postazione, stampanti, setDataSel } = useStore()
   const { isOpen: isMenuOpen, onOpen: onMenuOpen, onClose: onMenuClose } = useDisclosure()
   const { isOpen: isSetupOpen, onOpen: onSetupOpen, onClose: onSetupClose } = useDisclosure()
   const { isOpen: isNDOpen, onOpen: onNDOpen, onClose: onNDClose } = useDisclosure()
@@ -39,7 +39,7 @@ const Emissione = () => {
       'loop': 1,
       'type': 'giacca',
       'reprint': false,
-      'printer': printer,
+      'stampanti': stampanti,
       'test': true
     }
     apiClient.post(`/print/` + dataSel.id, record)
