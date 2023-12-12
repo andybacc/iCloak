@@ -1,5 +1,5 @@
 import { Heading } from '@chakra-ui/layout'
-import { Box, Button, Card, Center, CardBody, CardFooter, CardHeader, Container, Flex, Input, InputGroup, InputRightElement, ListItem, Spinner, Text, UnorderedList, VStack } from '@chakra-ui/react'
+import { Box, Button, Card, Center, CardBody, CardFooter, CardHeader, Container, Stack, Input, InputGroup, InputRightElement, ListItem, Spinner, Text, UnorderedList, VStack } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/toast'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -102,36 +102,21 @@ const Print = () => {
     if (!dataSel) return <Heading>Seleziona una data</Heading>
 
     return (
-    <Container>
-        <Center p='4'>
-            <Flex>
+    <Container >
+        <Center pt='4'>
+            <Stack direction={{base:'column', lg:'row'}}>
                 <Modulo type='giacca' num={lastNumG} Stampa={Stampa} isLoading={isLoading} />
                 <Modulo type='borsa' num={lastNumB} Stampa={Stampa} isLoading={isLoading} />
                 <Registro registro={registro} />
-            </Flex>
+            </Stack>
         </Center>
     </Container>
     )
 }
-const Registro = ({registro}) => {
-    return (
-        <Box h='75vh' overflow='hidden' minW='125px'>
-            <UnorderedList styleType={'none'}>
-            {registro.map((i, index) =>                 
-                <ListItem key={index} bgColor={color(i.type)} p='0.5' px='2'>
-                    <Box as="small">{i.reprint?'(R)':''} </Box>
-                    <Box as="b">{i.numero} </Box>
-                    <Box as="small">{dayjs(i.data).format('HH:mm:ss')}</Box>
-                </ListItem>
-            )}
-            </UnorderedList>
-        </Box>
-    )
-}
 const Modulo = ({type, num, Stampa, isLoading}) => {
     return (
-    <VStack>
-        <Card textAlign={'center'} mr='3' minW='310px'>
+    <Stack direction={{base:'row', lg:'column'}}>
+        <Card textAlign={'center'} w={{base: '100%', md:'290px'}}>
             <CardHeader bgColor="grey" textTransform='uppercase'>{type}</CardHeader>
             <CardBody >
                 <Heading as="h1" fontSize="5rem" p='6'>{(isLoading.status && (isLoading.type==type || isLoading.type=='numeri'))?<Spinner size='xl' /> : num}</Heading>
@@ -141,13 +126,30 @@ const Modulo = ({type, num, Stampa, isLoading}) => {
                 <Ristampa num={num} type={type} Stampa={Stampa} isLoading={isLoading} />
             </CardFooter>
         </Card>
-        <Button isDisabled={isLoading.status} variant='solid' bgColor={color(type)} w='150px' h='150px' onClick={()=>Stampa(num,type,false)} textTransform='uppercase'>
-            {type==='giacca'
-            ?<GiMonclerJacket fontSize='5rem' />
-            :<FaShoppingBag fontSize='5rem' />
-            }
-        </Button>
-    </VStack>
+        <Center>
+            <Button isDisabled={isLoading.status} variant='solid' bgColor={color(type)} w='150px' h='150px' onClick={()=>Stampa(num,type,false)} textTransform='uppercase'>
+                {type==='giacca'
+                ?<GiMonclerJacket fontSize='5rem' />
+                :<FaShoppingBag fontSize='5rem' />
+                }
+            </Button>
+        </Center>
+    </Stack>
+    )
+}
+const Registro = ({registro}) => {
+    return (
+        <Box h='75vh' overflow='hidden' w={{base: '100%', md:'125px'}}>
+            <UnorderedList styleType={'none'} p='0' m='0'>
+            {registro.map((i, index) =>                 
+                <ListItem key={index} bgColor={color(i.type)} p='0.5' px='2'>
+                    <Box as="small">{i.reprint?'(R)':''} </Box>
+                    <Box as="b">{i.numero} </Box>
+                    <Box as="small">{dayjs(i.data).format('HH:mm:ss')}</Box>
+                </ListItem>
+            )}
+            </UnorderedList>
+        </Box>
     )
 }
 const Ristampa = ({type,Stampa,isLoading}) => {

@@ -15,7 +15,7 @@ const Setup = ({isOpen,onClose}) => {
         <ModalBody>
           <VStack textAlign='center'>
             <Postazione onClose={onClose}/>
-            <Tipologie  onClose={onClose}/>
+            <Tipologie onClose={onClose}/>
             <Stampanti onClose={onClose}/>
           </VStack>
 

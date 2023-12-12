@@ -17,9 +17,13 @@ import useStore from '../store'
 const MyModal = ({isOpen,onClose}) => {
   const { date, setDate, dataSel, registro, setDataSel, delLastNumber, resetNumbers } = useStore()
   const [isLoading, setIsLoading] = useState({status: false, type: ''})
-  const [nomeData, setNomeData] = useState(dataSel?.nome || '')
+  const [nomeData, setNomeData] = useState('')
   const [lastNumber, setLastNumber] = useState(null)
   const toast = useToast()
+
+  useEffect(() => {
+    setNomeData(dataSel?.nome)
+  }, [dataSel])
 
   function aggiornaNome() {
     setIsLoading({status: true, type: 'aggiornaNome'})
@@ -39,7 +43,6 @@ const MyModal = ({isOpen,onClose}) => {
         }, 500);
     })
     .catch((e) => {
-
         setIsLoading({status: false, type: ''})
         toast({ title: (e?.response? e.response.data.error : e.message), status: 'error', isClosable: true })
     })
@@ -108,7 +111,8 @@ const MyModal = ({isOpen,onClose}) => {
           <VStack textAlign='center'>
             <FormControl>
               <Text mb='2'>Nome data</Text>
-              <Input id='nomeData'
+              <Input id='nomeData' 
+                placeholder='Dai un nome alla data'
                 value={nomeData}
                 onChange={(e) => setNomeData(e.target.value)}
               />

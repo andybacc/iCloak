@@ -80,6 +80,7 @@ const useStore = create((set) => ({
         return new Promise((resolve, reject) => {
                 apiClient.get(`/date/1`)
                 .then((r) => {
+                    console.log(r.data)
                     set((state)=> ({...state, date: r.data}))
                     resolve()
                 })

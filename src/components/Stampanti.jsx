@@ -14,7 +14,6 @@ const Stampanti = ({ onClose }) => {
   const toast = useToast()
 
   function aggiornaStampanti() {
-    console.log(fiscale)
     if (ricevuta?.active && (!ricevuta?.nome || !ricevuta?.ip)) {
       toast({ title: 'Inserisci nome e ip', status: 'warning', isClosable: true })
       setIsInvalidR({ ...isInvalidR, nome: !ricevuta.nome, ip: !ricevuta.ip })

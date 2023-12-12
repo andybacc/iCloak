@@ -1,15 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import Date from './pages/Date';
-import Emissione from './pages/Emissione';
 import useStore from './store';
-import { useToast } from "@chakra-ui/react"
+import Main from "./pages/Main";
 
 function App() {
   const { getRange } = useStore()
-  const { dataSel } = useStore()
-  const toast = useToast()
 
   useEffect(() => {
     getRange()
@@ -17,7 +12,7 @@ function App() {
 
   return (
     <ChakraProvider>
-      {dataSel? <Emissione /> : <Date />}
+      <Main />
     </ChakraProvider>
   )
 }

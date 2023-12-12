@@ -17,7 +17,7 @@ const NuovaData = ({isOpen,onClose}) => {
         setIsLoading(true)
         apiClient.post(`/date`, {data: newData, nome: nomeData})
         .then((r) => {
-          toast({ title: 'Data creata con successo', status: 'success', isClosable: true })
+          toast({ title: 'Data creata', status: 'success', isClosable: true })
           setTimeout(() => {
             fetchDate();
             setIsLoading(false)
@@ -49,7 +49,7 @@ const NuovaData = ({isOpen,onClose}) => {
         <ModalCloseButton />
         <ModalBody textAlign={'center'}>
             <Input id='nomeData'
-              placeholder="Dai un titolo alla data"
+              placeholder="Dai un nome alla data"
               size="md"
               type="text"
               my='3'
