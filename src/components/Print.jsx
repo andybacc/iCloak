@@ -13,7 +13,7 @@ function color(type) {
     return (type=='giacca')?'blue.400':'teal.400'
 }
 const Print = () => {
-    const { postazione, dataSel, prezzi, range, stampanti, registro, setRegistro } = useStore()
+    const { dataSel, prezzi, range, stampanti, registro, setRegistro } = useStore()
     const [lastNumG, setLastNumG] = useState(1)
     const [lastNumB, setLastNumB] = useState(1)
     const [isLoading, setIsLoading] = useState({status: true, type: 'numeri'})
@@ -47,7 +47,6 @@ const Print = () => {
             'prezzo': prezzi[type],
             'reprint': reprint?1:0,
             'stampanti': stampanti,
-            'postazione': postazione
         }
 
         apiClient.post(`/print/` + dataSel.id, record)
@@ -70,7 +69,7 @@ const Print = () => {
         })
     }
     useEffect(() => {
-        apiClient.get(`/registro/${dataSel.id}/${postazione}`)
+        apiClient.get(`/registro/${dataSel.id}`)
         .then((r) => {
             setRegistro(r.data)
             setIsLoading({status: false, type: ''})

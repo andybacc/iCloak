@@ -1,7 +1,7 @@
 import { Box, Container, Heading } from "@chakra-ui/layout";
 import { Button, Flex, useDisclosure, useToast } from "@chakra-ui/react";
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { BsChevronLeft, BsGearFill, BsPerson } from 'react-icons/bs';
 import { FaPlus } from "react-icons/fa";
 import { IoMdPrint } from 'react-icons/io';
@@ -12,22 +12,12 @@ import NuovaData from './NuovaData';
 import Setup from './Setup';
 
 const Head = () => {
-    const { dataSel, setDataSel, postazione, stampanti, fetchDate } = useStore()
+    const { isAdmin, dataSel, setDataSel, Logout, postazione, stampanti } = useStore()
     const [isLoading, setIsLoading] = useState(false)
     const { isOpen: isMenuOpen, onOpen: onMenuOpen, onClose: onMenuClose } = useDisclosure()
     const { isOpen: isSetupOpen, onOpen: onSetupOpen, onClose: onSetupClose } = useDisclosure()
     const { isOpen: isNDOpen, onOpen: onNDOpen, onClose: onNDClose } = useDisclosure()
     const toast = useToast()
-
-    useEffect(() => {
-        fetchDate().catch((e) => {
-            toast({
-                title: e.response.data.error,
-                status: 'error', 
-                isClosable: true
-            })
-        })
-    }, [])
 
     function printTest() {
         setIsLoading(true)
@@ -39,7 +29,7 @@ const Head = () => {
           'stampanti': stampanti,
           'test': true
         }
-        apiClient.post(`/print/` + dataSel.id, record)
+        apiClient.post(`/print/` + dataSel?.id, record)
           .then((r) => {
             setIsLoading(false)
             toast({
@@ -65,6 +55,7 @@ const Head = () => {
             <Button variant='fill' mr='2' color='yellow'><BsPerson />{postazione}</Button>
             {dataSel && <Button mr='2' variant='solid' onClick={onMenuOpen}>Menu</Button> }
             <Button variant='solid' onClick={onSetupOpen} ><BsGearFill /></Button>
+            <Button variant='solid' onClick={Logout} ml='2'>Esci</Button>
 
             <MenuData isOpen={isMenuOpen} onClose={onMenuClose} />
             <Setup isOpen={isSetupOpen} onClose={onSetupClose} />
@@ -78,7 +69,7 @@ const Head = () => {
                 <Heading size='md' pt='2.5'>{dataSel?.nome}</Heading>
              </Flex>
             :<Flex>
-                <Button mr='2' variant='solid' onClick={onNDOpen} leftIcon={<FaPlus />} color={'yellow'}>Nuova data</Button>
+                {isAdmin && <Button mr='2' variant='solid' onClick={onNDOpen} leftIcon={<FaPlus />} color={'yellow'}>Nuova data</Button>}
                 <ListaDate />
             </Flex>}
         </Container>

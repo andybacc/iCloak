@@ -6,7 +6,7 @@ import useStore from '../store';
 
 export default function Login() {
     const [postazione, setPostazione] = useState('')
-    const [password, setPassword] = useState("")
+    const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const { setAuth } = useStore()
     const toast = useToast()
@@ -42,7 +42,9 @@ export default function Login() {
                 <FormControl isRequired onSubmit={handleSubmit}>
                     <Box my='3'>
                         <FormLabel>User</FormLabel>
-                        <Input type="text" value={postazione} autoComplete="off" name='postazione'
+                        <Input type="text" 
+                            value={postazione} 
+                            name='postazione'
                             onChange={e => setPostazione(e.target.value)}
                         />
                     </Box>
@@ -53,7 +55,7 @@ export default function Login() {
                             pattern="[0-9]*"
                             inputMode="numeric"
                             value={password}
-                            autoComplete="off"
+                            name='password'
                             onChange={e => setPassword(e.target.value)}
                         />
                     </Box>

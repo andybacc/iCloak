@@ -10,4 +10,13 @@ const apiClient = axios.create({
       'apikey': import.meta.env.VITE_APP_APIKEY,
   }
 })
+apiClient.interceptors.request.use(function (config) {
+  const JWT = localStorage.getItem('iCloakToken');
+  if (JWT) config.headers['x-auth-token'] = JWT;
+  return config;
+}, function (e) {
+  console.log(e)
+  return Promise.reject(e);
+});
+
 export default apiClient;

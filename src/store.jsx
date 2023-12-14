@@ -5,12 +5,14 @@ import _ from 'lodash'
 const initialState = {
     registro: [],
     date: [],
+    dataSel: null,
     range: null,
     isLogged: false,
-    token: localStorage.tokenIcloak || null,
-    postazione: localStorage.getItem('postazione') || 'Cloak1',
-    prezzi: JSON.parse(localStorage.getItem('prezzi')) || {giacca: 3, borsa: 2},
-    stampanti: JSON.parse(localStorage.getItem('stampanti')) || {ricevuta: {nome: '', ip: '', lang: 'it', active: false}, fiscale: {nome: '', ip: '', active: false}},
+    isAdmin: false,
+    token: localStorage.getItem('iCloakToken') || null,
+    postazione: 'Cloak1',
+    prezzi: JSON.parse(localStorage.getItem('iCloakPrezzi')) || {giacca: 3, borsa: 2},
+    stampanti: JSON.parse(localStorage.getItem('iCloakStampanti')) || {ricevuta: {nome: '', ip: '', lang: 'it', active: false}, fiscale: {nome: '', ip: '', active: false}},
 }
 
 const useStore = create((set) => ({
@@ -19,17 +21,16 @@ const useStore = create((set) => ({
         var newState = {
             isLogged: true,
             postazione: payload.postazione,
-            session: { isAdmin: (payload.isAdmin) ? true : false },
+            isAdmin: (payload.postazione == 'iCloak1')? true : false,
             listino: payload.listino || [],
             date: payload.date || [],
             dataSel: payload.dataSel || null,
-            stampanti: payload.stampanti || {ricevuta: {nome: '', ip: '', active: false}, fiscale: {nome: '', ip: '', active: false}},
         }
         
         if(payload.token) {
-            newState.tokenIdrink = payload.token
+            newState.token = payload.token
             apiClient.defaults.headers.common['x-auth-token'] = payload.token;
-            localStorage.setItem('tokenIdrink', payload.token)
+            localStorage.setItem('iCloakToken', payload.token)
         }
         return newState
     }),
@@ -83,32 +84,22 @@ const useStore = create((set) => ({
         }
     }),
     setStampanti: (payload) => set((state) => {
-        localStorage.setItem('stampanti', JSON.stringify(payload))
+        localStorage.setItem('iCloakStampanti', JSON.stringify(payload))
         return {
             ...state,
             stampanti: payload,
         }
     }),
-    fetchDate: () => {
-        return new Promise((resolve, reject) => {
-                apiClient.get(`/date/1`)
-                .then((r) => {
-                    console.log(r.data)
-                    set((state)=> ({...state, date: r.data}))
-                    resolve()
-                })
-                .catch((e) => {
-                    console.log(e.message)
-                    reject(e)
-                })
-        })
-    },
     setServer: (payload) => set((state) => {
         localStorage.setItem('server', payload)
         return {
             ...state,
             server: payload,
         }
+    }),
+    Logout: () => set(() => {
+        localStorage.removeItem('iCloakToken')        
+        return initialState
     }),
 }))
 export default useStore
