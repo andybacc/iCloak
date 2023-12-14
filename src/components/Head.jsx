@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { BsChevronLeft, BsGearFill, BsPerson } from 'react-icons/bs';
 import { FaPlus } from "react-icons/fa";
 import { IoMdPrint } from 'react-icons/io';
-import apiClient from "../services/apiClient";
+import apiClient from "../apiClient";
 import useStore from "../store";
 import MenuData from './MenuData';
 import NuovaData from './NuovaData';

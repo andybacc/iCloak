@@ -11,7 +11,7 @@ import {
 import { useToast } from '@chakra-ui/toast'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
-import apiClient from '../services/apiClient'
+import apiClient from '../apiClient'
 import useStore from '../store'
 
 const MyModal = ({isOpen,onClose}) => {

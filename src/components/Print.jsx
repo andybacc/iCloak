@@ -6,7 +6,7 @@ import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { FaShoppingBag } from 'react-icons/fa'
 import { GiMonclerJacket } from 'react-icons/gi'
-import apiClient from '../services/apiClient'
+import apiClient from '../apiClient'
 import useStore from '../store'
 
 function color(type) {

@@ -1,7 +1,7 @@
 import { Button, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { BsCalendar2DateFill } from 'react-icons/bs'
-import apiClient from '../services/apiClient'
+import apiClient from '../apiClient'
 import useStore from '../store'
 
 const NuovaData = ({isOpen,onClose}) => {

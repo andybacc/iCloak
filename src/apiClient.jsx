@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const apiClient = axios.create({
   baseURL: (location.host.includes('localhost')
-    ?'http://192.168.1.2/node/iguardaroba2'
-    :'/node/iguardaroba2'),
+    ?'https://molocinque.ns0.it/node/icloak'
+    :'/node/icloak'),
   headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

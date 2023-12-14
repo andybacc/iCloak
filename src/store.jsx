@@ -1,11 +1,13 @@
 import { create } from 'zustand'
-import apiClient from './services/apiClient'
+import apiClient from './apiClient'
 import _ from 'lodash'
 
 const initialState = {
     registro: [],
     date: [],
     range: null,
+    isLogged: false,
+    token: localStorage.tokenIcloak || null,
     postazione: localStorage.getItem('postazione') || 'Cloak1',
     prezzi: JSON.parse(localStorage.getItem('prezzi')) || {giacca: 3, borsa: 2},
     stampanti: JSON.parse(localStorage.getItem('stampanti')) || {ricevuta: {nome: '', ip: '', lang: 'it', active: false}, fiscale: {nome: '', ip: '', active: false}},
@@ -13,12 +15,23 @@ const initialState = {
 
 const useStore = create((set) => ({
     ...initialState,
-    setPostazione: (payload) => set((state) => {
-        localStorage.setItem('postazione', payload)
-        return {
-            ...state,
-            postazione: payload,
+    setAuth: (payload) => set(() => {
+        var newState = {
+            isLogged: true,
+            postazione: payload.postazione,
+            session: { isAdmin: (payload.isAdmin) ? true : false },
+            listino: payload.listino || [],
+            date: payload.date || [],
+            dataSel: payload.dataSel || null,
+            stampanti: payload.stampanti || {ricevuta: {nome: '', ip: '', active: false}, fiscale: {nome: '', ip: '', active: false}},
         }
+        
+        if(payload.token) {
+            newState.tokenIdrink = payload.token
+            apiClient.defaults.headers.common['x-auth-token'] = payload.token;
+            localStorage.setItem('tokenIdrink', payload.token)
+        }
+        return newState
     }),
     setPrezzi: (payload) => set((state) => {
         localStorage.setItem('prezzi', JSON.stringify(payload))
