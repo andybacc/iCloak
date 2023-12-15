@@ -28,7 +28,7 @@ export default function Login() {
             setLoading(false)
             toast({
                 title: "Errore",
-                description: e.response?.data?.error || e.message,
+                description: e.response?.data?.error?.message || e.message,
                 status: "error",
                 isClosable: true,
             })     
