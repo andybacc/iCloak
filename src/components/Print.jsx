@@ -13,7 +13,7 @@ function color(type) {
     return (type=='giacca')?'blue.400':'teal.400'
 }
 const Print = () => {
-    const { dataSel, prezzi, range, stampanti, registro, setRegistro } = useStore()
+    const { venue, dataSel, prezzi, range, stampanti, registro, setRegistro } = useStore()
     const [lastNumG, setLastNumG] = useState(1)
     const [lastNumB, setLastNumB] = useState(1)
     const [isLoading, setIsLoading] = useState({status: true, type: 'numeri'})
@@ -46,6 +46,7 @@ const Print = () => {
             'type': type,
             'prezzo': prezzi[type],
             'reprint': reprint?1:0,
+            'venue': venue,
             'stampanti': stampanti,
         }
 

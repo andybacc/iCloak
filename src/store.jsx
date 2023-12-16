@@ -9,8 +9,9 @@ const initialState = {
     range: null,
     isLogged: false,
     isAdmin: false,
+    venue: localStorage.getItem('iCloakVenue') || 'Molocinque',
     token: localStorage.getItem('iCloakToken') || null,
-    postazione: 'Cloak1',
+    postazione: 'iCloak1',
     prezzi: JSON.parse(localStorage.getItem('iCloakPrezzi')) || {giacca: 3, borsa: 2},
     stampanti: JSON.parse(localStorage.getItem('iCloakStampanti')) || {ricevuta: {nome: '', ip: '', lang: 'it', active: false}, fiscale: {nome: '', ip: '', active: false}},
 }
@@ -39,6 +40,13 @@ const useStore = create((set) => ({
         return {
             ...state,
             prezzi: payload,
+        }
+    }),
+    setVenue: (payload) => set((state) => {
+        localStorage.setItem('iCloakVenue', payload)
+        return {
+            ...state,
+            venue: payload,
         }
     }),
     setRange: (payload) => set((state) => {

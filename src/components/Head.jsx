@@ -2,7 +2,7 @@ import { Box, Container, Heading } from "@chakra-ui/layout";
 import { Button, Flex, useDisclosure, useToast } from "@chakra-ui/react";
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { BsChevronLeft, BsGearFill, BsPerson } from 'react-icons/bs';
+import { BsBuildingsFill, BsChevronLeft, BsGearFill, BsPerson } from 'react-icons/bs';
 import { FaPlus } from "react-icons/fa";
 import { IoMdPrint } from 'react-icons/io';
 import apiClient from "../apiClient";
@@ -11,8 +11,9 @@ import MenuData from './MenuData';
 import NuovaData from './NuovaData';
 import Setup from './Setup';
 
+
 const Head = () => {
-    const { isAdmin, dataSel, setDataSel, Logout, postazione, stampanti } = useStore()
+    const { venue, isAdmin, dataSel, setDataSel, Logout, postazione, stampanti } = useStore()
     const [isLoading, setIsLoading] = useState(false)
     const { isOpen: isMenuOpen, onOpen: onMenuOpen, onClose: onMenuClose } = useDisclosure()
     const { isOpen: isSetupOpen, onOpen: onSetupOpen, onClose: onSetupClose } = useDisclosure()
@@ -27,6 +28,7 @@ const Head = () => {
           'type': 'giacca',
           'reprint': false,
           'stampanti': stampanti,
+          'venue': venue,
           'test': true
         }
         apiClient.post(`/print/` + dataSel?.id, record)
@@ -51,11 +53,12 @@ const Head = () => {
     return (
         <>        
         <Container textAlign={'right'} p='4' minW={{base: '100%', md:'755px'}}>
+            {isAdmin && <Button variant='fill' color='white' leftIcon={<BsBuildingsFill />}>{venue}</Button> }
+            <Button variant='fill' mr='2' color='yellow' leftIcon={<BsPerson />}>{postazione}</Button>
             {dataSel && stampanti?.ricevuta?.active && <Button mr='2' isLoading={isLoading} variant='solid' leftIcon={<IoMdPrint />} onClick={() => printTest()}>Test</Button>}
-            <Button variant='fill' mr='2' color='yellow'><BsPerson />{postazione}</Button>
             {dataSel && <Button mr='2' variant='solid' onClick={onMenuOpen}>Menu</Button> }
             <Button variant='solid' onClick={onSetupOpen} ><BsGearFill /></Button>
-            <Button variant='solid' onClick={Logout} ml='2'>Esci</Button>
+            <Button variant='solid' colorScheme='teal' onClick={Logout} ml='2'>Esci</Button>
 
             <MenuData isOpen={isMenuOpen} onClose={onMenuClose} />
             <Setup isOpen={isSetupOpen} onClose={onSetupClose} />

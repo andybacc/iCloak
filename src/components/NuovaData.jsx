@@ -5,11 +5,11 @@ import apiClient from '../apiClient'
 import useStore from '../store'
 
 const NuovaData = ({isOpen,onClose}) => {
+    const { date, setDate } = useStore()
     const [newData, setNewData] = useState('')
     const [nomeData, setNomeData] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isInvalid, setIsInvalid] = useState({nomeData: false, data: false})
-    const { fetchDate } = useStore()
     const toast = useToast()
   
     function createNewDate() {
@@ -17,9 +17,13 @@ const NuovaData = ({isOpen,onClose}) => {
         setIsLoading(true)
         apiClient.post(`/date`, {data: newData, nome: nomeData})
         .then((r) => {
+          console.log(r.data)
+          var dateTmp = date
+          dateTmp.push({nome: nomeData, data: newData, id: r.data[0]})
+          setDate(dateTmp)
+          
           toast({ title: 'Data creata', status: 'success', isClosable: true })
           setTimeout(() => {
-            fetchDate();
             setIsLoading(false)
             onClose()
           }, 500);

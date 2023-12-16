@@ -2,6 +2,7 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOve
 import React from 'react'
 import Stampanti from './Stampanti'
 import Tipologie from './Tipologie'
+import Venue from './Venue'
 
 const Setup = ({isOpen,onClose}) => {
 
@@ -13,10 +14,10 @@ const Setup = ({isOpen,onClose}) => {
         <ModalCloseButton />
         <ModalBody>
           <VStack textAlign='center'>
+            <Venue onClose={onClose}/>
             <Tipologie onClose={onClose}/>
             <Stampanti onClose={onClose}/>
           </VStack>
-
         </ModalBody>
       </ModalContent>
     </Modal>
