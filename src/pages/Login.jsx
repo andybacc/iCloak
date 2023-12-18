@@ -45,6 +45,7 @@ export default function Login() {
                         <Input type="text" 
                             value={postazione} 
                             name='postazione'
+                            id="postazione"
                             onChange={e => setPostazione(e.target.value)}
                         />
                     </Box>
@@ -56,6 +57,7 @@ export default function Login() {
                             inputMode="numeric"
                             value={password}
                             name='password'
+                            id='password'
                             onChange={e => setPassword(e.target.value)}
                         />
                     </Box>
