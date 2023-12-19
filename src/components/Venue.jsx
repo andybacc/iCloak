@@ -5,18 +5,23 @@ import React, { useState } from 'react'
 import useStore from '../store'
 
 const Venue = ({onClose}) => {
-  const { venue, setVenue } = useStore()
-    const [nome, setNome] = useState(venue||'')
+  const { settings, saveSettings } = useStore()
+    const [nome, setNome] = useState(settings.venue||'')
     const [isLoading, setIsLoading] = useState(false)
     const toast = useToast()
+
     function cambiaVenue() {
       setIsLoading(true)
-      setVenue(nome)
-      toast({ title: 'Nome venue impostato', status: 'success', isClosable: true })
-      setTimeout(() => {
+      saveSettings({ ...settings, venue: nome}).then((r) => {
+        toast({ title: 'Nome venue impostato', status: 'success', isClosable: true })
+        setTimeout(() => {
+          setIsLoading(false)
+          onClose()
+        }, 500);
+      }).catch((e) => {
+        toast({ title: 'Errore', description: e.message, status: 'error', isClosable: true })
         setIsLoading(false)
-        onClose()
-      }, 500);
+      })
     }
     return (
       <>

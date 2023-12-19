@@ -4,21 +4,26 @@ import React, { useState } from 'react'
 import useStore from '../store'
 
 const Tipologie = ({onClose}) => {
-  const { prezzi, setPrezzi, range, setRange } = useStore()
-  const [intervallo, setIntervallo] = useState(range)
+  const { settings, saveSettings } = useStore()
+  const [prezzi, setPrezzi] = useState(settings.prezzi)
+  const [intervallo, setIntervallo] = useState(settings.range)
 
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const toast = useToast()
   
   function saveRange() {
-    setLoading(true)
-    setRange(intervallo)
-    setPrezzi(prezzi)
-    setTimeout(() => {
+    setIsLoading(true)
+
+    saveSettings({ ...settings, 'range': intervallo, 'prezzi': prezzi}).then((r) => {
       toast({ title: 'Tipologie impostate', status: 'success', isClosable: true })
-      setLoading(false)
-      onClose()
-    }, 300);
+      setTimeout(() => {
+        setIsLoading(false)
+        onClose()
+      }, 300)
+    }).catch((e) => {
+      toast({ title: 'Errore', description: e.message, status: 'error', isClosable: true })
+      setIsLoading(false)
+    })
   }
 
   if (!intervallo) return null
@@ -76,7 +81,7 @@ const Tipologie = ({onClose}) => {
               </FormControl>
               <FormControl px='1'>
                 <Text>max</Text>
-                <NumberInput defaultValue={range.B.max}>
+                <NumberInput defaultValue={intervallo.B.max}>
                   <NumberInputField w='70px' min={1} max={9999} size='lg' px='2'
                     onChange={(e) => setIntervallo({ ...intervallo, B: { min: intervallo.B.min, max: parseInt(e.target.value)}})}
                   />

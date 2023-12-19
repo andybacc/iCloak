@@ -7,13 +7,9 @@ import useStore from './store';
 import apiClient from "./apiClient";
 
 function App() {
-  const { token, isLogged, getRange, setAuth } = useStore()
+  const { token, isLogged, setAuth } = useStore()
   const [isInit, setIsInit] = useState(false)
   const toast = useToast()
-
-  useEffect(() => {
-    getRange()
-  }, [])
 
   useEffect(() => {
     if (token) {

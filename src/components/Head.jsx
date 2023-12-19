@@ -13,7 +13,7 @@ import Setup from './Setup';
 
 
 const Head = () => {
-    const { venue, isAdmin, dataSel, setDataSel, Logout, postazione, stampanti } = useStore()
+    const { settings, isAdmin, dataSel, setDataSel, Logout, postazione } = useStore()
     const [isLoading, setIsLoading] = useState(false)
     const { isOpen: isMenuOpen, onOpen: onMenuOpen, onClose: onMenuClose } = useDisclosure()
     const { isOpen: isSetupOpen, onOpen: onSetupOpen, onClose: onSetupClose } = useDisclosure()
@@ -23,12 +23,8 @@ const Head = () => {
     function printTest() {
         setIsLoading(true)
         var record = {
-          'numero': 1,
-          'loop': 1,
-          'type': 'giacca',
-          'reprint': false,
-          'stampanti': stampanti,
-          'venue': venue,
+          'stampanti': settings.stampanti,
+          'venue': settings.venue,
           'test': true
         }
         apiClient.post(`/print/` + dataSel?.id, record)
@@ -53,9 +49,9 @@ const Head = () => {
     return (
         <>        
         <Container textAlign={'right'} p='4' minW={{base: '100%', md:'755px'}}>
-            {isAdmin && <Button variant='fill' color='white' leftIcon={<BsBuildingsFill />}>{venue}</Button> }
+            {isAdmin && <Button variant='fill' color='white' leftIcon={<BsBuildingsFill />}>{settings.venue}</Button> }
             <Button variant='fill' mr='2' color='yellow' leftIcon={<BsPerson />}>{postazione}</Button>
-            {dataSel && stampanti?.ricevuta?.active && <Button mr='2' isLoading={isLoading} variant='solid' leftIcon={<IoMdPrint />} onClick={() => printTest()}>Test</Button>}
+            {dataSel && settings.stampanti?.ricevuta?.active && <Button mr='2' isLoading={isLoading} variant='solid' leftIcon={<IoMdPrint />} onClick={() => printTest()}>Test</Button>}
             {dataSel && <Button mr='2' variant='solid' onClick={onMenuOpen}>Menu</Button> }
             <Button variant='solid' onClick={onSetupOpen} ><BsGearFill /></Button>
             <Button variant='solid' colorScheme='teal' onClick={Logout} ml='2'>Esci</Button>

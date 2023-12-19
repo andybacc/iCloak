@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 import useStore from '../store'
 
 const Stampanti = ({ onClose }) => {
-  const { stampanti, setStampanti } = useStore()
+  const { settings, saveSettings } = useStore()
   const [isLoading, setIsLoading] = useState(false)
   const [isInvalidR, setIsInvalidR] = useState({ nome: false, ip: false })
   const [isInvalidF, setIsInvalidF] = useState({ nome: false, ip: false })
 
-  const [ricevuta, setRicevuta] = useState(stampanti?.ricevuta || {})
-  const [fiscale, setFiscale] = useState(stampanti?.fiscale || {})
+  const [ricevuta, setRicevuta] = useState(settings.stampanti?.ricevuta || { nome: '', ip: '', lang: 'it' })
+  const [fiscale, setFiscale] = useState(settings.stampanti?.fiscale || { nome: '', ip: '', lang: 'it' })
 
   const toast = useToast()
 
@@ -28,12 +28,17 @@ const Stampanti = ({ onClose }) => {
     setIsInvalidF({ nome: false, ip: false })
 
     setIsLoading(true)
-    setStampanti({ ricevuta, fiscale })
-    toast({ title: 'Stampanti aggiornate', status: 'success', isClosable: true })
-    setTimeout(() => {
+
+    saveSettings({ ...settings, 'stampanti': {ricevuta,fiscale}}).then((r) => {
+      toast({ title: 'Stampanti impostate', status: 'success', isClosable: true })
+      setTimeout(() => {
+        setIsLoading(false)
+        onClose()
+      }, 300)
+    }).catch((e) => {
+      toast({ title: 'Errore', description: e.message, status: 'error', isClosable: true })
       setIsLoading(false)
-      onClose()
-    }, 300);
+    })
   }
   return (
     <>

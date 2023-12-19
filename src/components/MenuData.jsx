@@ -52,9 +52,9 @@ const MyModal = ({isOpen,onClose}) => {
     apiClient.delete(`/reset/` + dataSel.id)
     .then((r) => {
         toast({ title: 'Numeri resettati', status: 'success', isClosable: true })
+        resetNumbers()
         setTimeout(() => {
             setIsLoading({status: false, type: ''})
-            resetNumbers()
             onClose()
         }, 500);
     })

@@ -6,14 +6,16 @@ const initialState = {
     registro: [],
     date: [],
     dataSel: null,
-    range: null,
     isLogged: false,
     isAdmin: false,
-    venue: localStorage.getItem('iCloakVenue') || 'Molocinque',
     token: localStorage.getItem('iCloakToken') || null,
     postazione: 'iCloak1',
-    prezzi: JSON.parse(localStorage.getItem('iCloakPrezzi')) || {giacca: 3, borsa: 2},
-    stampanti: JSON.parse(localStorage.getItem('iCloakStampanti')) || {ricevuta: {nome: '', ip: '', lang: 'it', active: false}, fiscale: {nome: '', ip: '', active: false}},
+    settings: {
+        venue: 'Molocinque',
+        prezzi: {giacca: 3, borsa: 2},
+        range: {'G': {min: 1, max: 9999}, 'B': {min: 1, max: 9999}},
+        stampanti: {ricevuta: {nome: '', ip: '', active: false}, fiscale: {nome: '', ip: '', active: false}}
+    },
 }
 
 const useStore = create((set) => ({
@@ -26,6 +28,7 @@ const useStore = create((set) => ({
             listino: payload.listino || [],
             date: payload.date || [],
             dataSel: payload.dataSel || null,
+            settings: (payload.settings && payload.settings!=null)? payload.settings : initialState.settings,
         }
         
         if(payload.token) {
@@ -35,31 +38,17 @@ const useStore = create((set) => ({
         }
         return newState
     }),
-    setPrezzi: (payload) => set((state) => {
-        localStorage.setItem('prezzi', JSON.stringify(payload))
-        return {
-            ...state,
-            prezzi: payload,
-        }
-    }),
-    setVenue: (payload) => set((state) => {
-        localStorage.setItem('iCloakVenue', payload)
-        return {
-            ...state,
-            venue: payload,
-        }
-    }),
-    setRange: (payload) => set((state) => {
-        localStorage.setItem('range', JSON.stringify(payload))
-        return {
-            ...state,
-            range: payload,
-        }
-    }),
-    getRange: () => {
-        var localS = localStorage.getItem('range')
-        var myRange = (localS && localS!=='undefined')? JSON.parse(localS) : {'G': {min: 1, max: 9999}, 'B': {min: 1, max: 9999}}
-        set((state)=> ({...state, range: myRange}))
+    saveSettings: (payload) => {
+        return new Promise((resolve, reject) => {
+            apiClient.post(`/settings`, {settings: payload})
+            .then(function (r) {
+                set({settings: payload})
+                resolve(r.data)
+            })
+            .catch(function (e) {
+                reject(e)
+            })
+        })
     },
     setDate: (payload) => set((state) => {
         return {
@@ -88,7 +77,7 @@ const useStore = create((set) => ({
     resetNumbers: () => set((state) => {
         return {
             ...state,
-            registro: _.reject(state.registro, {data: state.dataSel}),
+            registro: [],
         }
     }),
     setStampanti: (payload) => set((state) => {

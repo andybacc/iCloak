@@ -13,10 +13,12 @@ function color(type) {
     return (type=='giacca')?'blue.400':'teal.400'
 }
 const Print = () => {
-    const { venue, dataSel, prezzi, range, stampanti, registro, setRegistro } = useStore()
+    const { dataSel, settings, registro, setRegistro } = useStore()
     const [lastNumG, setLastNumG] = useState(1)
     const [lastNumB, setLastNumB] = useState(1)
     const [isLoading, setIsLoading] = useState({status: true, type: 'numeri'})
+    const range = settings.range
+    const prezzi = settings.prezzi
     const toast = useToast()
 
     const Stampa = (num,type,reprint=false) => {
@@ -28,7 +30,7 @@ const Print = () => {
             return
         }
 
-        var myRange = (type=='giacca')?range.G:range.B
+        var myRange = (type=='giacca')?range.G : range.B
         if (num<myRange.min) {
             toast({ title: 'Numero inferiore al minimo', status: 'error', isClosable: true })
             setIsLoading({status: false, type: ''})
@@ -44,10 +46,10 @@ const Print = () => {
             'numero': parseInt(num),
             'loop': 1,
             'type': type,
-            'prezzo': prezzi[type],
+            'prezzo': settings.prezzi[type],
             'reprint': reprint?1:0,
-            'venue': venue,
-            'stampanti': stampanti,
+            'stampanti': settings.stampanti,
+            'venue': settings.venue,
         }
 
         apiClient.post(`/print/` + dataSel.id, record)
