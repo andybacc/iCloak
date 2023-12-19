@@ -21,6 +21,7 @@ const initialState = {
 const useStore = create((set) => ({
     ...initialState,
     setAuth: (payload) => set(() => {
+        console.log(payload)
         var newState = {
             isLogged: true,
             postazione: payload.postazione,
@@ -95,7 +96,7 @@ const useStore = create((set) => ({
         }
     }),
     Logout: () => set(() => {
-        localStorage.removeItem('iCloakToken')        
+        localStorage.removeItem('iCloakToken')      
         return initialState
     }),
 }))

@@ -1,13 +1,14 @@
-import { ChakraProvider, useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from 'react';
+import apiClient from "./apiClient";
 import Loading from "./components/Loading";
+import Date from "./pages/Date";
 import Login from "./pages/Login";
 import Main from "./pages/Main";
 import useStore from './store';
-import apiClient from "./apiClient";
 
 function App() {
-  const { token, isLogged, setAuth } = useStore()
+  const { dataSel, token, isLogged, setAuth } = useStore()
   const [isInit, setIsInit] = useState(false)
   const toast = useToast()
 
@@ -41,10 +42,13 @@ function App() {
   }, [token])
 
   if (!isInit) return <Loading />
+
+  if (!isLogged) return <Login />
+
   return (
-    <ChakraProvider>
-      {isLogged? <Main /> : <Login />}
-    </ChakraProvider>
+    <>
+      {dataSel? <Main /> : <Date />}
+    </>
   )
 }
 export default App;
