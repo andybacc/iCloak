@@ -7,18 +7,8 @@ import apiClient from '../apiClient'
 import useStore from '../store'
 
 const Date = () => {
-    const { date, isAdmin, setDataSel, setDate } = useStore()
+    const { date, isAdmin, setDataSel } = useStore()
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    useEffect(() => {
-      apiClient.get(`/date`)
-      .then((r) => {
-        setDate(r.data)
-      })
-      .catch(() => {
-        setDate([])
-      })
-    }, [])
 
     return (
       <Center minH='100vh'>
@@ -55,6 +45,7 @@ const NuovaData = ({isOpen,onClose}) => {
         var newData = { id: r.data.id, data: newData, nome: nomeData }
         var dateNew = date
         dateNew.push(newData)
+        _.orderBy(dateNew, ['data'], ['desc'])
         setDate(dateNew)
 
         toast({ title: 'Data creata', status: 'success', isClosable: true })
