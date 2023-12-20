@@ -21,7 +21,6 @@ const initialState = {
 const useStore = create((set) => ({
     ...initialState,
     setAuth: (payload) => set(() => {
-        console.log(payload)
         var newState = {
             isLogged: true,
             postazione: payload.postazione,
