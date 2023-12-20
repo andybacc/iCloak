@@ -14,7 +14,7 @@ const initialState = {
         venue: 'Molocinque',
         prezzi: {giacca: 3, borsa: 2},
         range: {'G': {min: 1, max: 9999}, 'B': {min: 1, max: 9999}},
-        stampanti: {ricevuta: {nome: '', ip: '', active: false}, fiscale: {nome: '', ip: '', active: false}}
+        stampanti: {ricevuta: {nome: '', ip: '', lang: 'it', active: false}, fiscale: {nome: '', ip: '', active: false}}
     },
 }
 
