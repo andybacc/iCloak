@@ -8,6 +8,8 @@ const initialState = {
     dataSel: null,
     isLogged: false,
     isAdmin: false,
+    useMqtt: true,
+    lastNumbers: {G: 1, B: 1},
     token: localStorage.getItem('iCloakToken') || null,
     postazione: 'iCloak1',
     settings: {
@@ -33,10 +35,27 @@ const useStore = create((set) => ({
         
         if(payload.token) {
             newState.token = payload.token
-            apiClient.defaults.headers.common['x-auth-token'] = payload.token;
             localStorage.setItem('iCloakToken', payload.token)
         }
         return newState
+    }),
+    setLastGiacca: (payload) => set((state) => {
+        return {
+            ...state,
+            lastNumbers: {
+                ...state.lastNumbers,
+                G: payload
+            }
+        }
+    }),
+    setLastBorsa: (payload) => set((state) => {
+        return {
+            ...state,
+            lastNumbers: {
+                ...state.lastNumbers,
+                B: payload
+            }
+        }
     }),
     saveSettings: (payload) => {
         return new Promise((resolve, reject) => {
@@ -87,13 +106,13 @@ const useStore = create((set) => ({
             stampanti: payload,
         }
     }),
-    setServer: (payload) => set((state) => {
-        localStorage.setItem('server', payload)
-        return {
-            ...state,
-            server: payload,
-        }
-    }),
+    // setServer: (payload) => set((state) => {
+    //     localStorage.setItem('server', payload)
+    //     return {
+    //         ...state,
+    //         server: payload,
+    //     }
+    // }),
     Logout: () => set(() => {
         localStorage.removeItem('iCloakToken')      
         return initialState

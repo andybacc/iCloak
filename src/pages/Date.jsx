@@ -17,7 +17,8 @@ const Date = () => {
           <Img src='./icon-192.png' alt='iCloak' w='200px' />
         <Heading as='h1' size='lg' mb='4'>Seleziona data di lavoro</Heading>
         {isAdmin && <Button size='lg' my='2rem' variant='solid' onClick={onOpen} leftIcon={<FaPlus />} color={'yellow'}>Nuova data</Button>}
-        {date?.map((d,i) => (<Button size='lg' my='0' variant='solid' key={i} data={d.prodotti} onClick={()=>setDataSel(d)}>
+        {date?.map((d,i) => (<Button size='lg' my='0' variant='solid' key={i} data={d.prodotti} 
+        onClick={()=>setDataSel(d)}>
             <Box py='3'>
               <Box fontSize='xs'>{dayjs(d.data).format('DD/MM/YYYY')}</Box>
               <Box fontSize='lg'>{d.nome}</Box>
@@ -43,9 +44,8 @@ const NuovaData = ({isOpen,onClose}) => {
       setIsLoading(true)
       apiClient.post(`/date`, {data: newData, nome: nomeData})
       .then((r) => {
-        var newData = { id: r.data.id, data: newData, nome: nomeData }
         var dateNew = date
-        dateNew.push(newData)
+        dateNew.push(r.data)
         _.orderBy(dateNew, ['data'], ['desc'])
         setDate(dateNew)
 

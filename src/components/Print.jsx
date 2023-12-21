@@ -13,12 +13,9 @@ function color(type) {
     return (type=='giacca')?'blue.400':'teal.400'
 }
 const Print = () => {
-    const { dataSel, settings, registro, setRegistro } = useStore()
-    const [lastNumG, setLastNumG] = useState(1)
-    const [lastNumB, setLastNumB] = useState(1)
+    const { dataSel, settings, registro, setRegistro, lastNumbers, setLastGiacca, setLastBorsa } = useStore()
     const [isLoading, setIsLoading] = useState({status: true, type: 'numeri'})
     const range = settings.range
-    const prezzi = settings.prezzi
     const toast = useToast()
 
     const Stampa = (num,type,reprint=false) => {
@@ -84,6 +81,7 @@ const Print = () => {
     }, [dataSel] )
 
     useEffect(() => {
+        console.log('registro', registro)
         var giacche = _.find(registro, {type: 'giacca', reprint: 0})
         var borse = _.find(registro, {type: 'borsa', reprint: 0})
 
@@ -93,22 +91,20 @@ const Print = () => {
         if (ultimaGiacca<range.G.min) ultimaGiacca = range.G.min
         if (ultimaBorsa<range.B.min) ultimaBorsa = range.B.min
 
-        setLastNumG(ultimaGiacca)
-        setLastNumB(ultimaBorsa)
+        setLastGiacca(ultimaGiacca)
+        setLastBorsa(ultimaBorsa)
         
         setTimeout(() => {
             setIsLoading({status: false, type: ''})
         }, 100)
     }, [dataSel, registro])
 
-    if (!dataSel) return <Heading>Seleziona una data</Heading>
-
     return (
     <Container >
         <Center pt='4'>
             <Stack direction={{base:'column', lg:'row'}}>
-                <Modulo type='giacca' num={lastNumG} Stampa={Stampa} isLoading={isLoading} />
-                <Modulo type='borsa' num={lastNumB} Stampa={Stampa} isLoading={isLoading} />
+                <Modulo type='giacca' num={lastNumbers.G} Stampa={Stampa} isLoading={isLoading} />
+                <Modulo type='borsa' num={lastNumbers.B} Stampa={Stampa} isLoading={isLoading} />
                 <Registro registro={registro} />
             </Stack>
         </Center>

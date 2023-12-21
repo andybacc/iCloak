@@ -1,11 +1,11 @@
-import { Container, Flex, Heading } from "@chakra-ui/layout";
-import { Button, useDisclosure, useToast } from "@chakra-ui/react";
+import { Button, Container, Flex, Heading, Spacer, useDisclosure, useToast } from "@chakra-ui/react";
 import React, { useState } from 'react';
 import { BsBuildingsFill, BsChevronLeft, BsGearFill, BsPerson } from 'react-icons/bs';
 import { IoMdPrint } from 'react-icons/io';
 import apiClient from "../apiClient";
 import useStore from "../store";
 import MenuData from './MenuData';
+import Mqtt from "./Mqtt";
 import NuovaData from './NuovaData';
 import Setup from './Setup';
 
@@ -61,6 +61,8 @@ const Head = () => {
             <Flex>
                 <Button onClick={()=>setDataSel(null)} mr='4'><BsChevronLeft /></Button>
                 <Heading size='md' pt='2.5'>{dataSel?.nome}</Heading>
+                <Spacer />
+                <Mqtt />
              </Flex>
         </Container>
       </>
