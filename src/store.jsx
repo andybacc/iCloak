@@ -76,6 +76,7 @@ const useStore = create((set) => ({
         }
     }),
     setDataSel: (payload) => set((state) => {
+        if (payload) apiClient.get(`/data/${payload.id}`)
         return {
             ...state,
             dataSel: payload,

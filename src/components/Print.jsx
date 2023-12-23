@@ -81,7 +81,6 @@ const Print = () => {
     }, [dataSel] )
 
     useEffect(() => {
-        console.log('registro', registro)
         var giacche = _.find(registro, {type: 'giacca', reprint: 0})
         var borse = _.find(registro, {type: 'borsa', reprint: 0})
 
