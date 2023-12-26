@@ -46,8 +46,7 @@ const NuovaData = ({isOpen,onClose}) => {
       .then((r) => {
         var dateNew = date
         dateNew.push(r.data)
-        _.orderBy(dateNew, ['data'], ['desc'])
-        setDate(dateNew)
+        setDate(_.orderBy(dateNew, ['data'], ['desc']))
 
         toast({ title: 'Data creata', status: 'success', isClosable: true })
         setTimeout(() => {
