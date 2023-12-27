@@ -18,8 +18,7 @@ function App() {
       .then(function (r) {
         setAuth(r.data)
         toast({
-            title: "Login effettuato",
-            description: "Benvenuto " + r.data.postazione,
+            title: "Benvenuto " + r.data.postazione,
             status: "success",
             isClosable: true,
         })
