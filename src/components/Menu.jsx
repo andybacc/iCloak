@@ -12,9 +12,10 @@ import { useToast } from '@chakra-ui/toast'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import apiClient from '../apiClient'
+import Matrici from './Matrici'
 import useStore from '../store'
 
-const MyModal = ({isOpen,onClose}) => {
+const Menu = ({isOpen,onClose}) => {
   const { date, setDate, dataSel, registro, setDataSel, delLastNumber, resetNumbers } = useStore()
   const [isLoading, setIsLoading] = useState({status: false, type: ''})
   const [nomeData, setNomeData] = useState('')
@@ -105,7 +106,7 @@ const MyModal = ({isOpen,onClose}) => {
     <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} size='xl' >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Menu data</ModalHeader>
+        <ModalHeader>Menu</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack textAlign='center'>
@@ -120,6 +121,8 @@ const MyModal = ({isOpen,onClose}) => {
                 isLoading={isLoading.status&&isLoading.type=='aggiornaNome'}
                 onClick={()=>aggiornaNome()}>Aggiorna</Button>
             </FormControl>
+          <Divider my='3'/>
+          <Matrici />
           <Divider my='3'/>
           <HStack>
               <Box w='33%'>
@@ -145,4 +148,4 @@ const MyModal = ({isOpen,onClose}) => {
   )
 }
 
-export default MyModal
+export default Menu

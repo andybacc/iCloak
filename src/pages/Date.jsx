@@ -1,7 +1,7 @@
 import { Box, Button, Center, Heading, Img, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, useDisclosure, useToast } from '@chakra-ui/react'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { BsCalendar2DateFill } from 'react-icons/bs'
 import { FaPlus } from 'react-icons/fa'
 import apiClient from '../apiClient'
@@ -38,6 +38,7 @@ const NuovaData = ({isOpen,onClose}) => {
   const [isInvalid, setIsInvalid] = useState({nomeData: false, data: false})
   const { date, setDate } = useStore()
   const toast = useToast()
+  const initialRef = useRef(null)
 
   function createNewDate() {
     if (newData!='' && nomeData!='') {
@@ -68,7 +69,7 @@ const NuovaData = ({isOpen,onClose}) => {
     }
   }
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} size='xl' >
+    <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} initialFocusRef={initialRef} >
     <ModalOverlay />
     <ModalContent>
       <ModalHeader>Nuova Data</ModalHeader>
@@ -81,6 +82,7 @@ const NuovaData = ({isOpen,onClose}) => {
             my='3'
             isInvalid={isInvalid?.nomeData}
             onChange={(e) => setNomeData(e.target.value) }
+            ref={initialRef}
           />
         <InputGroup>
           <InputLeftAddon children={<BsCalendar2DateFill />} size='md' />

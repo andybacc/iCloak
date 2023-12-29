@@ -4,8 +4,7 @@ import { BsBuildingsFill, BsChevronLeft, BsGearFill, BsPerson } from 'react-icon
 import { IoMdPrint } from 'react-icons/io';
 import apiClient from "../apiClient";
 import useStore from "../store";
-import MenuData from './MenuData';
-import NuovaData from './NuovaData';
+import Menu from './Menu';
 import Setup from './Setup';
 
 const Head = () => {
@@ -13,7 +12,7 @@ const Head = () => {
     const [isLoading, setIsLoading] = useState(false)
     const { isOpen: isMenuOpen, onOpen: onMenuOpen, onClose: onMenuClose } = useDisclosure()
     const { isOpen: isSetupOpen, onOpen: onSetupOpen, onClose: onSetupClose } = useDisclosure()
-    const { isOpen: isNDOpen, onOpen: onNDOpen, onClose: onNDClose } = useDisclosure()
+    // const { isOpen: isNDOpen, onOpen: onNDOpen, onClose: onNDClose } = useDisclosure()
     const toast = useToast()
 
     function printTest() {
@@ -52,9 +51,8 @@ const Head = () => {
             <Button variant='solid' onClick={onSetupOpen} ><BsGearFill /></Button>
             <Button variant='solid' colorScheme='teal' onClick={Logout} ml='2'>Esci</Button>
 
-            <MenuData isOpen={isMenuOpen} onClose={onMenuClose} />
+            <Menu isOpen={isMenuOpen} onClose={onMenuClose} />
             <Setup isOpen={isSetupOpen} onClose={onSetupClose} />
-            <NuovaData isOpen={isNDOpen} onClose={onNDClose} />
         </Container>
         <Container minW={{base: '100%', md:'755px'}}>
             <Flex>
