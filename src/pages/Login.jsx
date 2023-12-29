@@ -45,7 +45,7 @@ export default function Login() {
                         <Input type="text" 
                             value={postazione} 
                             name='postazione'
-                            id="postazione"
+                            autoCapitalize="none"
                             onChange={e => setPostazione(e.target.value)}
                         />
                     </Box>
