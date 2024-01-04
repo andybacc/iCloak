@@ -39,7 +39,7 @@ const Head = () => {
     }
     
     return (
-        <>        
+      <>        
         <Container textAlign={'right'} p='4' minW={{base: '100%', md:'755px'}}>
             {isAdmin && <Button variant='fill' color='white' leftIcon={<BsBuildingsFill />}>{settings.venue}</Button> }
             <Button variant='fill' mr='2' color='yellow' leftIcon={<BsPerson />}>{postazione}</Button>
