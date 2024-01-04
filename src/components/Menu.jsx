@@ -1,22 +1,15 @@
-import {
-  Box, Button,
-  Divider,
-  FormControl,
-  HStack,
-  Input,
-  Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay,
-  Text,
-  VStack
-} from '@chakra-ui/react'
+import { Box, Button, Divider, FormControl, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, VStack, useDisclosure } from '@chakra-ui/react'
 import { useToast } from '@chakra-ui/toast'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
 import apiClient from '../apiClient'
-import Matrici from './Matrici'
 import useStore from '../store'
+import Matrici from './Matrici'
 
-const Menu = ({isOpen,onClose}) => {
+
+const Menu = () => {
   const { date, setDate, dataSel, registro, setDataSel, delLastNumber, resetNumbers } = useStore()
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState({status: false, type: ''})
   const [nomeData, setNomeData] = useState('')
   const [lastNumber, setLastNumber] = useState(null)
@@ -103,6 +96,8 @@ const Menu = ({isOpen,onClose}) => {
   }, [registro])
 
   return (
+    <>
+      <Button mr='2' variant='solid' onClick={onOpen}>Menu</Button>
     <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} size='xl' >
       <ModalOverlay />
       <ModalContent>
@@ -145,6 +140,7 @@ const Menu = ({isOpen,onClose}) => {
         </ModalBody>
       </ModalContent>
     </Modal>
+    </>
   )
 }
 

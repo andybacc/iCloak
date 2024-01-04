@@ -1,9 +1,10 @@
-import { Box, Button, Center, Heading, Img, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Heading, Img, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, VStack, useDisclosure, useToast } from '@chakra-ui/react'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import React, { useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { BsCalendar2DateFill } from 'react-icons/bs'
 import { FaPlus } from 'react-icons/fa'
+import { version } from '../../package.json'
 import apiClient from '../apiClient'
 import useStore from '../store'
 
@@ -14,7 +15,10 @@ const Date = () => {
     return (
       <Center minH='100vh'>
         <VStack>
-          <Img src='./icon-192.png' alt='iCloak' w='200px' />
+          <Flex>
+            <Img src='./icon-192.png' alt='iCloak' w='200px' />
+            <Text as='small'>v{version}</Text>
+          </Flex>
         <Heading as='h1' size='lg' mb='4'>Seleziona data di lavoro</Heading>
         {isAdmin && <Button size='lg' my='2rem' variant='solid' onClick={onOpen} leftIcon={<FaPlus />} color={'yellow'}>Nuova data</Button>}
         {date?.map((d,i) => (<Button size='lg' my='0' variant='solid' key={i} data={d.prodotti} 

@@ -1,12 +1,17 @@
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react'
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
+import { BsGearFill } from 'react-icons/bs'
+import { version } from '../../package.json'
 import Stampanti from './Stampanti'
 import Tipologie from './Tipologie'
 import Venue from './Venue'
 
-const Setup = ({isOpen,onClose}) => {
+const Setup = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
+    <>
+      <Button variant='solid' onClick={onOpen} rightIcon={<BsGearFill />}>v{version}</Button>
     <Modal isCentered isOpen={isOpen} onClose={onClose} blockScrollOnMount={false} size='xl' >
       <ModalOverlay />
       <ModalContent>
@@ -21,6 +26,8 @@ const Setup = ({isOpen,onClose}) => {
         </ModalBody>
       </ModalContent>
     </Modal>
+    </>
+
   )
 }
 
